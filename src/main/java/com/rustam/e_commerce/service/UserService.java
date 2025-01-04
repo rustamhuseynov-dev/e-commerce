@@ -8,6 +8,7 @@ import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.UserCreateResponse;
+import com.rustam.e_commerce.dto.response.UserDeletedResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
 import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import com.rustam.e_commerce.exception.custom.ExistsException;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +66,19 @@ public class UserService {
             throw new ExistsException("This username is already taken.");
         }
         modelMapper.map(userUpdateRequest, user);
+        UserUpdateResponse.builder().text("This user has been updated by you.").build();
         baseUserRepository.save(user);
         return userMapper.toUpdated(user);
+    }
+
+    public UserDeletedResponse delete(UUID id) {
+        BaseUser baseUser = utilService.findById(id);
+        String currentUsername = utilService.getCurrentUsername();
+        utilService.validation(baseUser.getId(), currentUsername);
+        UserDeletedResponse deletedResponse = new UserDeletedResponse();
+        modelMapper.map(baseUser, deletedResponse);
+        deletedResponse.setText("This user was deleted by you.");
+        baseUserRepository.delete(baseUser);
+        return deletedResponse;
     }
 }
