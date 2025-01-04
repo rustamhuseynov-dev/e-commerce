@@ -4,10 +4,13 @@ import com.rustam.e_commerce.dao.entity.BaseUser;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.dto.request.AuthRequest;
+import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
 import com.rustam.e_commerce.dto.response.AuthResponse;
 import com.rustam.e_commerce.exception.custom.IncorrectPasswordException;
+import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.util.UserDetailsServiceImpl;
 import com.rustam.e_commerce.util.UtilService;
+import com.rustam.e_commerce.util.jwt.JwtUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,11 +28,11 @@ import java.time.Duration;
 @FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
 public class AuthService {
 
-    BaseUserRepository baseUserRepository;
     UtilService utilService;
     UserDetailsServiceImpl userDetailsService;
     PasswordEncoder passwordEncoder;
     RedisTemplate<String,String> redisTemplate;
+    JwtUtil jwtUtil;
 
     public AuthResponse login(AuthRequest authRequest) {
         BaseUser baseUser = utilService.findByUsername(authRequest.getUsername());
@@ -43,5 +46,32 @@ public class AuthService {
         return AuthResponse.builder()
                 .tokenPair(tokenPair)
                 .build();
+    }
+
+    public String refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        log.info("api-gateway to send refresh token {}",refreshTokenRequest.getRefreshToken());
+        String userId = jwtUtil.getUserIdAsUsernameFromTokenExpired(refreshTokenRequest.getRefreshToken()); // Token-dan user ID-ni çıxart
+        if (userId == null) {
+            throw new UnauthorizedException("Invalid refresh token");
+        }
+        String redisKey = "refresh_token:" + userId; // Redis açarını yaradın
+        String storedRefreshToken = redisTemplate.opsForValue().get(redisKey); // Redis-dən saxlanmış refresh token-i alın
+        if (storedRefreshToken != null) {
+            return jwtUtil.createToken(userId);
+        } else {
+            throw new UnauthorizedException("Invalid refresh token");
+        }
+    }
+
+    public String logout(RefreshTokenRequest refreshTokenRequest) {
+        String userId = jwtUtil.getUserIdAsUsernameFromToken(refreshTokenRequest.getRefreshToken());
+        String redisKey = "refresh_token:" + userId;
+        Boolean delete = redisTemplate.delete(redisKey);
+        if (Boolean.TRUE.equals(delete)){
+            return "The refresh token was deleted and the user was logged out.";
+        }
+        else {
+            throw new UnauthorizedException("An error occurred while logging out.");
+        }
     }
 }
