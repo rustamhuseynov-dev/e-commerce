@@ -1,8 +1,10 @@
 package com.rustam.e_commerce.mapper;
 
+import com.rustam.e_commerce.dao.entity.BaseUser;
 import com.rustam.e_commerce.dao.entity.User;
 import com.rustam.e_commerce.dto.response.UserCreateResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
+import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -21,4 +23,6 @@ public interface UserMapper {
     UserCreateResponse toResponse(User user);
 
     List<UserResponse> toResponses(List<User> users);
+
+    UserUpdateResponse toUpdated(BaseUser user);
 }
