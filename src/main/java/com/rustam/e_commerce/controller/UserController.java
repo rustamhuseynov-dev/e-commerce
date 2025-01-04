@@ -3,6 +3,7 @@ package com.rustam.e_commerce.controller;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.UserCreateResponse;
+import com.rustam.e_commerce.dto.response.UserDeletedResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
 import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import com.rustam.e_commerce.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -33,5 +35,10 @@ public class UserController {
     @PutMapping(path = "/update")
     public ResponseEntity<UserUpdateResponse> update(@RequestBody UserUpdateRequest userUpdateRequest){
         return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<UserDeletedResponse> delete(@PathVariable UUID id){
+        return new ResponseEntity<>(userService.delete(id),HttpStatus.OK);
     }
 }
