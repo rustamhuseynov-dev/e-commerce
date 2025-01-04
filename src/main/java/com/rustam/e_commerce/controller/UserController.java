@@ -1,8 +1,10 @@
 package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
+import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.UserCreateResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
+import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import com.rustam.e_commerce.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,5 +28,10 @@ public class UserController {
     @GetMapping(path = "/read")
     public ResponseEntity<List<UserResponse>> read(){
         return new ResponseEntity<>(userService.read(),HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<UserUpdateResponse> update(@RequestBody UserUpdateRequest userUpdateRequest){
+        return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);
     }
 }
