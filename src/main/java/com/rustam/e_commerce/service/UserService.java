@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public List<UserResponse> read() {
-        List<User> users = utilService.findAllBy();
+        List<User> users = utilService.findAllByUser();
         return userMapper.toResponses(users);
     }
 
@@ -59,7 +59,7 @@ public class UserService {
         String currentUsername = utilService.getCurrentUsername();
         BaseUser user = utilService.findById(userUpdateRequest.getId());
         utilService.validation(currentUsername, user.getId());
-        boolean exists = utilService.findAllBy().stream()
+        boolean exists = utilService.findAllByUser().stream()
                 .map(User::getUsername)
                 .anyMatch(existingUsername -> existingUsername.equals(userUpdateRequest.getUsername()));
         if (exists) {
