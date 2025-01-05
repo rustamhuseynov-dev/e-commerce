@@ -14,5 +14,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseUser{
+    @Column(unique = true)
     private String username;
 }
