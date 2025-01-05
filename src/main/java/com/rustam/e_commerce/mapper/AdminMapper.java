@@ -4,6 +4,7 @@ import com.rustam.e_commerce.dao.entity.Admin;
 import com.rustam.e_commerce.dao.entity.BaseUser;
 import com.rustam.e_commerce.dto.response.AdminCreateResponse;
 import com.rustam.e_commerce.dto.response.AdminResponse;
+import com.rustam.e_commerce.dto.response.AdminUpdateResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -19,4 +20,6 @@ public interface AdminMapper {
     AdminCreateResponse toResponse(Admin admin);
 
     AdminResponse toRead(BaseUser user);
+
+    AdminUpdateResponse toUpdated(BaseUser user);
 }

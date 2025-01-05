@@ -1,6 +1,7 @@
 package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
+import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.*;
@@ -32,12 +33,12 @@ public class AdminController {
     }
 
     @PutMapping(path = "/update")
-    public ResponseEntity<UserUpdateResponse> update(@Valid @RequestBody UserUpdateRequest userUpdateRequest){
-        return new ResponseEntity<>(adminService.update(userUpdateRequest),HttpStatus.OK);
+    public ResponseEntity<AdminUpdateResponse> update(@Valid @RequestBody AdminUpdateRequest adminUpdateRequest){
+        return new ResponseEntity<>(adminService.update(adminUpdateRequest),HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<UserDeletedResponse> delete(@PathVariable UUID id){
+    public ResponseEntity<AdminDeleteResponse> delete(@PathVariable UUID id){
         return new ResponseEntity<>(adminService.delete(id),HttpStatus.OK);
     }
 }

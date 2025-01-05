@@ -1,5 +1,6 @@
 package com.rustam.e_commerce.util;
 
+import com.rustam.e_commerce.dao.entity.Admin;
 import com.rustam.e_commerce.dao.entity.BaseUser;
 import com.rustam.e_commerce.dao.entity.User;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
@@ -61,10 +62,13 @@ public class UtilService {
         return baseUserRepository.findAll();
     }
 
-    public List<User> findAllBy(){
-        return baseUserRepository.findAllBy();
+    public List<User> findAllByUser(){
+        return baseUserRepository.findAllUsers();
     }
 
+    public List<Admin> findAllByAdmin(){
+        return baseUserRepository.findAllAdmins();
+    }
 
     public void validation(String currentUsername, String username) {
         if (!currentUsername.equals(username)){

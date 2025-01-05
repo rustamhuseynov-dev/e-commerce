@@ -2,18 +2,20 @@ package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.Admin;
 import com.rustam.e_commerce.dao.entity.BaseUser;
+import com.rustam.e_commerce.dao.entity.User;
 import com.rustam.e_commerce.dao.entity.enums.Role;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
+import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
-import com.rustam.e_commerce.dto.response.AdminCreateResponse;
-import com.rustam.e_commerce.dto.response.AdminResponse;
-import com.rustam.e_commerce.dto.response.UserCreateResponse;
+import com.rustam.e_commerce.dto.response.*;
+import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.mapper.AdminMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class AdminService {
     UtilService utilService;
     PasswordEncoder passwordEncoder;
     AdminMapper adminMapper;
+    ModelMapper modelMapper;
 
     public AdminCreateResponse create(AdminCreateRequest adminCreateRequest) {
         BaseUser user = utilService.findById(adminCreateRequest.getId());
@@ -57,5 +60,32 @@ public class AdminService {
     public AdminResponse readById(UUID id) {
         BaseUser user = utilService.findById(id);
         return adminMapper.toRead(user);
+    }
+
+    public AdminUpdateResponse update(AdminUpdateRequest adminUpdateRequest) {
+        String currentUsername = utilService.getCurrentUsername();
+        BaseUser user = utilService.findById(adminUpdateRequest.getId());
+        utilService.validation(currentUsername, user.getId());
+        boolean exists = utilService.findAllByAdmin().stream()
+                .map(Admin::getUsername)
+                .anyMatch(existingUsername -> existingUsername.equals(adminUpdateRequest.getUsername()));
+        if (exists) {
+            throw new ExistsException("This username is already taken.");
+        }
+        modelMapper.map(adminUpdateRequest, user);
+        UserUpdateResponse.builder().text("This user has been updated by you.").build();
+        baseUserRepository.save(user);
+        return adminMapper.toUpdated(user);
+    }
+
+    public AdminDeleteResponse delete(UUID id) {
+        BaseUser baseUser = utilService.findById(id);
+        String currentUsername = utilService.getCurrentUsername();
+        utilService.validation(baseUser.getId(), currentUsername);
+        AdminDeleteResponse deletedResponse = new AdminDeleteResponse();
+        modelMapper.map(baseUser, deletedResponse);
+        deletedResponse.setText("This user was deleted by you.");
+        baseUserRepository.delete(baseUser);
+        return deletedResponse;
     }
 }
