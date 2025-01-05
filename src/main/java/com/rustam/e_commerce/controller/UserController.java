@@ -7,6 +7,7 @@ import com.rustam.e_commerce.dto.response.UserDeletedResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
 import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import com.rustam.e_commerce.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(path = "/create")
-    public ResponseEntity<UserCreateResponse> create(@RequestBody UserCreateRequest userCreateRequest){
+    public ResponseEntity<UserCreateResponse> create(@Valid @RequestBody UserCreateRequest userCreateRequest){
         return new ResponseEntity<>(userService.create(userCreateRequest), HttpStatus.CREATED);
     }
 
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/update")
-    public ResponseEntity<UserUpdateResponse> update(@RequestBody UserUpdateRequest userUpdateRequest){
+    public ResponseEntity<UserUpdateResponse> update(@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);
     }
 
