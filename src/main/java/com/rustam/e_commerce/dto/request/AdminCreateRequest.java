@@ -1,19 +1,24 @@
 package com.rustam.e_commerce.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthRequest {
+public class AdminCreateRequest {
 
-    @NotBlank(message = "The username column cannot be empty.")
+    @NotBlank(message = "The id column cannot be empty.")
+    private UUID id;
     private String username;
-    @NotBlank(message = "The password column cannot be empty.")
+    private String email;
     private String password;
+
 }
