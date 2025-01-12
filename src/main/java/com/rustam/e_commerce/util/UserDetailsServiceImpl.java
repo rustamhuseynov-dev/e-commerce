@@ -1,6 +1,6 @@
 package com.rustam.e_commerce.util;
 
-import com.rustam.e_commerce.dao.entity.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.util.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
