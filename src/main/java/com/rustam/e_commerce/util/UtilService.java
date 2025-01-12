@@ -1,17 +1,20 @@
 package com.rustam.e_commerce.util;
 
-import com.rustam.e_commerce.dao.entity.Admin;
-import com.rustam.e_commerce.dao.entity.BaseUser;
-import com.rustam.e_commerce.dao.entity.User;
+import com.rustam.e_commerce.dao.entity.Cart;
+import com.rustam.e_commerce.dao.entity.Product;
+import com.rustam.e_commerce.dao.entity.user.Admin;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.Employee;
+import com.rustam.e_commerce.dao.entity.user.User;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
+import com.rustam.e_commerce.dao.repository.CartRepository;
+import com.rustam.e_commerce.dao.repository.EmployeeRepository;
+import com.rustam.e_commerce.dao.repository.ProductRepository;
 import com.rustam.e_commerce.dto.TokenPair;
-import com.rustam.e_commerce.exception.custom.InvalidUUIDFormatException;
-import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
-import com.rustam.e_commerce.exception.custom.UserNotFoundException;
+import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +31,9 @@ public class UtilService {
 
     private final BaseUserRepository baseUserRepository;
     private final JwtUtil jwtUtil;
-    private final RedisTemplate<String,String> redisTemplate;
+    private final EmployeeRepository employeeRepository;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
 
     public BaseUser findByUsername(String username) {
         return baseUserRepository.findByUsername(username)
@@ -82,6 +87,29 @@ public class UtilService {
             return authentication.getName();
         }
         return null;
+    }
+
+    public String generateIbanForUser() {
+        String countryCode = "AZ";
+        String checkDigits = "00";
+        String uniqueAccountPart = UUID.randomUUID().toString().replace("-", "").substring(0, 22);
+
+        return countryCode + checkDigits + uniqueAccountPart;
+    }
+
+    public Employee findByEmployeeId(UUID id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("No such employee found."));
+    }
+
+    public Product findByProductId(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("No such product found"));
+    }
+
+    public Cart findByCartId(Long id) {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new CartNotFoundException("No such cart was found"));
     }
 
 }

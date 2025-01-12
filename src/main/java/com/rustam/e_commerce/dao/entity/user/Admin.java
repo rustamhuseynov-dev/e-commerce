@@ -1,4 +1,4 @@
-package com.rustam.e_commerce.dao.entity;
+package com.rustam.e_commerce.dao.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

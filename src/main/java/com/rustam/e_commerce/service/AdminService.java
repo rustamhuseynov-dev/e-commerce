@@ -1,13 +1,11 @@
 package com.rustam.e_commerce.service;
 
-import com.rustam.e_commerce.dao.entity.Admin;
-import com.rustam.e_commerce.dao.entity.BaseUser;
-import com.rustam.e_commerce.dao.entity.User;
+import com.rustam.e_commerce.dao.entity.user.Admin;
 import com.rustam.e_commerce.dao.entity.enums.Role;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
-import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.mapper.AdminMapper;
@@ -20,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Service

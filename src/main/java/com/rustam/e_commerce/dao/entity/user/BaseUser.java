@@ -1,4 +1,4 @@
-package com.rustam.e_commerce.dao.entity;
+package com.rustam.e_commerce.dao.entity.user;
 
 import com.rustam.e_commerce.dao.entity.enums.Role;
 import jakarta.persistence.*;

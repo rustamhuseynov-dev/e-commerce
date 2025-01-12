@@ -1,9 +1,9 @@
 package com.rustam.e_commerce.service;
 
 
-import com.rustam.e_commerce.dao.entity.BaseUser;
-import com.rustam.e_commerce.dao.entity.User;
 import com.rustam.e_commerce.dao.entity.enums.Role;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.User;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
