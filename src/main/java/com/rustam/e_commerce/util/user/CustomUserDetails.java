@@ -1,6 +1,6 @@
 package com.rustam.e_commerce.util.user;
 
-import com.rustam.e_commerce.dao.entity.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
