@@ -1,8 +1,8 @@
 package com.rustam.e_commerce.dao.repository;
 
-import com.rustam.e_commerce.dao.entity.Admin;
-import com.rustam.e_commerce.dao.entity.BaseUser;
-import com.rustam.e_commerce.dao.entity.User;
+import com.rustam.e_commerce.dao.entity.user.Admin;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
