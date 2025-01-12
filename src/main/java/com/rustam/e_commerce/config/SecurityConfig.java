@@ -1,5 +1,6 @@
 package com.rustam.e_commerce.config;
 
+import com.rustam.e_commerce.dao.entity.enums.Role;
 import com.rustam.e_commerce.util.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(x ->
                         x
                                 .requestMatchers("api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
+                                .requestMatchers("/api/v1/admin/**","api/v1/user/read").hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
