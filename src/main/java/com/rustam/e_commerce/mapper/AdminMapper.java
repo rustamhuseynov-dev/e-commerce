@@ -1,7 +1,7 @@
 package com.rustam.e_commerce.mapper;
 
-import com.rustam.e_commerce.dao.entity.Admin;
-import com.rustam.e_commerce.dao.entity.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.Admin;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dto.response.AdminCreateResponse;
 import com.rustam.e_commerce.dto.response.AdminResponse;
 import com.rustam.e_commerce.dto.response.AdminUpdateResponse;
