@@ -34,7 +34,7 @@ public class CartService {
     ModelMapper modelMapper;
 
     public CartResponse addToCart(CartRequest cartRequest) {
-        Optional<Cart> cartOptional = cartRepository.findByUserId(cartRequest.getUserId());
+        Optional<Cart> cartOptional = cartRepository.findByUser(cartRequest.getUserId());
         Cart cart = new Cart();
         if (cartOptional.isEmpty()){
             cart.setUser(cartRequest.getUserId());
