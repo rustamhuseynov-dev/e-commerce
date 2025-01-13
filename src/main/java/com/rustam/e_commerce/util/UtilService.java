@@ -68,11 +68,11 @@ public class UtilService {
     }
 
     public List<User> findAllByUser(){
-        return baseUserRepository.findAllUsers();
+        return baseUserRepository.findAllUser();
     }
 
     public List<Admin> findAllByAdmin(){
-        return baseUserRepository.findAllAdmins();
+        return baseUserRepository.findAllAdmin();
     }
 
     public void validation(String currentUsername, String username) {
