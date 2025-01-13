@@ -43,6 +43,7 @@ public class UserService {
                 .username(userCreateRequest.getUsername())
                 .email(userCreateRequest.getEmail())
                 .password(passwordEncoder.encode(userCreateRequest.getPassword()))
+                .phone(userCreateRequest.getPhone())
                 .enabled(true)
                 .authorities(Collections.singleton(Role.USER))
                 .build();
