@@ -16,7 +16,9 @@ public interface BaseUserRepository extends JpaRepository<BaseUser, UUID> {
     @Query(value = "SELECT * FROM base_users WHERE user_type = 'USER' AND username = :username", nativeQuery = true)
     Optional<User> findByUsername(String username);
 
-    List<User> findAllUsers();
+    @Query(value = "SELECT * from base_users where user_type = 'USER'",nativeQuery = true)
+    List<User> findAllUser();
 
-    List<Admin> findAllAdmins();
+    @Query(value = "SELECT * from base_users where user_type = 'ADMIN'",nativeQuery = true)
+    List<Admin> findAllAdmin();
 }
