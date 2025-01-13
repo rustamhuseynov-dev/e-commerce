@@ -12,6 +12,7 @@ import com.rustam.e_commerce.dto.response.UserDeletedResponse;
 import com.rustam.e_commerce.dto.response.UserResponse;
 import com.rustam.e_commerce.dto.response.UserUpdateResponse;
 import com.rustam.e_commerce.exception.custom.ExistsException;
+import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.mapper.UserMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -76,6 +77,10 @@ public class UserService {
         BaseUser baseUser = utilService.findById(id);
         String currentUsername = utilService.getCurrentUsername();
         utilService.validation(baseUser.getId(), currentUsername);
+        boolean tokenDeleted = utilService.deleteRefreshToken(id);
+        if (!tokenDeleted){
+            throw new UnauthorizedException("An error occurred while logging out.");
+        }
         UserDeletedResponse deletedResponse = new UserDeletedResponse();
         modelMapper.map(baseUser, deletedResponse);
         deletedResponse.setText("This user was deleted by you.");
