@@ -15,6 +15,7 @@ import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +35,7 @@ public class UtilService {
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
+    private final RedisTemplate<String,String> redisTemplate;
 
     public BaseUser findByUsername(String username) {
         return baseUserRepository.findByUsername(username)
@@ -112,4 +114,8 @@ public class UtilService {
                 .orElseThrow(() -> new CartNotFoundException("No such cart was found"));
     }
 
+    public boolean deleteRefreshToken(UUID id) {
+        String redisKey = "refresh_token:" + id;
+        return Boolean.TRUE.equals(redisTemplate.delete(redisKey));
+    }
 }
