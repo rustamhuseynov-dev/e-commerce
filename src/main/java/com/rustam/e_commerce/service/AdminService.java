@@ -6,6 +6,7 @@ import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
+import com.rustam.e_commerce.dto.request.ForAdminRequest;
 import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.mapper.AdminMapper;
@@ -30,6 +31,18 @@ public class AdminService {
     PasswordEncoder passwordEncoder;
     AdminMapper adminMapper;
     ModelMapper modelMapper;
+
+    public ForAdminResponse adminRequest(ForAdminRequest forAdminRequest) {
+        BaseUser user = utilService.findById(forAdminRequest.getId());
+        user.setAuthorities(Collections.singleton(Role.ADMIN));
+        baseUserRepository.save(user);
+        return ForAdminResponse.builder()
+                .id(forAdminRequest.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getAuthorities())
+                .build();
+    }
 
     public AdminCreateResponse create(AdminCreateRequest adminCreateRequest) {
         BaseUser user = utilService.findById(adminCreateRequest.getId());
