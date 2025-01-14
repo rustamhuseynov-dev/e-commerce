@@ -34,7 +34,7 @@ public class AdminService {
 
     public ForAdminResponse adminRequest(ForAdminRequest forAdminRequest) {
         BaseUser user = utilService.findById(forAdminRequest.getId());
-        user.setAuthorities(Collections.singleton(Role.ADMIN));
+        user.setAuthorities(Collections.singleton(Role.REQUEST_ADMIN));
         baseUserRepository.save(user);
         return ForAdminResponse.builder()
                 .id(forAdminRequest.getId())
@@ -53,16 +53,17 @@ public class AdminService {
                 .enabled(true)
                 .authorities(Collections.singleton(Role.ADMIN))
                 .build();
-        if (adminCreateRequest.getUsername().isBlank()){
+        if (!adminCreateRequest.getUsername().isBlank()){
             admin.setUsername(adminCreateRequest.getUsername());
         }
-        if (adminCreateRequest.getEmail().isBlank()){
+        if (!adminCreateRequest.getEmail().isBlank()){
             admin.setEmail(adminCreateRequest.getEmail());
         }
-        if (adminCreateRequest.getPassword().isBlank()){
+        if (!adminCreateRequest.getPassword().isBlank()){
             admin.setPassword(passwordEncoder.encode(adminCreateRequest.getPassword()));
         }
         baseUserRepository.save(admin);
+        baseUserRepository.delete(user);
         AdminCreateResponse.builder().text("Good luck in your new position.").build();
         return adminMapper.toResponse(admin);
     }
