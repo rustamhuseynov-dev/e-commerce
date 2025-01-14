@@ -2,6 +2,7 @@ package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
+import com.rustam.e_commerce.dto.request.ForAdminRequest;
 import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.service.AdminService;
 import jakarta.validation.Valid;
@@ -17,6 +18,11 @@ import java.util.UUID;
 public class AdminController {
 
     private final AdminService adminService;
+
+    @PostMapping(path = "/request-admin")
+    public ResponseEntity<ForAdminResponse> requestAdmin(@RequestBody ForAdminRequest forAdminRequest){
+        return new ResponseEntity<>(adminService.adminRequest(forAdminRequest),HttpStatus.OK);
+    }
 
     @PostMapping(path = "/create")
     public ResponseEntity<AdminCreateResponse> create(@Valid @RequestBody AdminCreateRequest adminCreateRequest){
