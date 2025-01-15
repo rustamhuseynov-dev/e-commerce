@@ -1,4 +1,4 @@
-package com.rustam.e_commerce.dto.request;
+package com.rustam.e_commerce.dto.response;
 
 import com.rustam.e_commerce.dao.entity.Category;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateProductRequest {
+public class ProductReadResponse {
+    private Long productId;
     private String productName;
     private String description;
     private Integer quantity;
     private double price;
     private double discount;
-    private Long categoryId;
+    private double specialPrice;
+    private Category category;
 }

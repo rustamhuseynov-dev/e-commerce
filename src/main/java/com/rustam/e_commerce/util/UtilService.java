@@ -122,4 +122,8 @@ public class UtilService {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException("No such category was found"));
     }
+
+    public List<Product> findAllProduct() {
+        return productRepository.findAll();
+    }
 }
