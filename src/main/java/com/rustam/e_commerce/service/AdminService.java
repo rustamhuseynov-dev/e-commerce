@@ -6,6 +6,7 @@ import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
+import com.rustam.e_commerce.dto.request.ForAdminRequest;
 import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.mapper.AdminMapper;
@@ -31,6 +32,18 @@ public class AdminService {
     AdminMapper adminMapper;
     ModelMapper modelMapper;
 
+    public ForAdminResponse adminRequest(ForAdminRequest forAdminRequest) {
+        BaseUser user = utilService.findById(forAdminRequest.getId());
+        user.setAuthorities(Collections.singleton(Role.REQUEST_ADMIN));
+        baseUserRepository.save(user);
+        return ForAdminResponse.builder()
+                .id(forAdminRequest.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getAuthorities())
+                .build();
+    }
+
     public AdminCreateResponse create(AdminCreateRequest adminCreateRequest) {
         BaseUser user = utilService.findById(adminCreateRequest.getId());
         Admin admin = Admin.builder()
@@ -40,16 +53,17 @@ public class AdminService {
                 .enabled(true)
                 .authorities(Collections.singleton(Role.ADMIN))
                 .build();
-        if (adminCreateRequest.getUsername().isBlank()){
+        if (!adminCreateRequest.getUsername().isBlank()){
             admin.setUsername(adminCreateRequest.getUsername());
         }
-        if (adminCreateRequest.getEmail().isBlank()){
+        if (!adminCreateRequest.getEmail().isBlank()){
             admin.setEmail(adminCreateRequest.getEmail());
         }
-        if (adminCreateRequest.getPassword().isBlank()){
+        if (!adminCreateRequest.getPassword().isBlank()){
             admin.setPassword(passwordEncoder.encode(adminCreateRequest.getPassword()));
         }
         baseUserRepository.save(admin);
+        baseUserRepository.delete(user);
         AdminCreateResponse.builder().text("Good luck in your new position.").build();
         return adminMapper.toResponse(admin);
     }

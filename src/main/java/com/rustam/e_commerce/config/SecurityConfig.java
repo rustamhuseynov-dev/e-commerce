@@ -33,7 +33,7 @@ public class SecurityConfig {
                         x
                                 .requestMatchers("/api/v1/auth/**","/api/v1/user/create").permitAll()
                                 .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
-                                .requestMatchers("/api/v1/admin/**","/api/v1/user/read").hasAuthority(Role.ADMIN.getValue())
+                                .requestMatchers("/api/v1/admin/**","/api/v1/user/**").hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
