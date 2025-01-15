@@ -34,8 +34,6 @@ public class Product {
 
     private String productName;
 
-    private String image;
-
     private String description;
 
     private Integer quantity;
