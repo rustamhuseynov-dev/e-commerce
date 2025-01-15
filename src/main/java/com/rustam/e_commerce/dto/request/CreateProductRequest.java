@@ -16,6 +16,5 @@ public class CreateProductRequest {
     private Integer quantity;
     private double price;
     private double discount;
-    private double specialPrice;
     private Long categoryId;
 }
