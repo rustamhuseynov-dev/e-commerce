@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Category {
 
     @Id
@@ -28,7 +30,6 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade =  CascadeType.ALL )
+    @OneToMany(mappedBy = "category", cascade =  CascadeType.ALL)
     private List<Product> products;
-
 }
