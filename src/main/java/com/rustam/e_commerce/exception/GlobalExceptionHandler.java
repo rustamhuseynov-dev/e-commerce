@@ -1,9 +1,7 @@
 package com.rustam.e_commerce.exception;
 
 import com.rustam.e_commerce.dto.response.message.ExceptionResponseMessages;
-import com.rustam.e_commerce.exception.custom.IncorrectPasswordException;
-import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
-import com.rustam.e_commerce.exception.custom.UserNotFoundException;
+import com.rustam.e_commerce.exception.custom.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +51,30 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
                 HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(ProductNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(CartNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(CategoryNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+                HttpStatus.NOT_FOUND
         );
     }
 

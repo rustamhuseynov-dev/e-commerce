@@ -1,15 +1,13 @@
 package com.rustam.e_commerce.util;
 
 import com.rustam.e_commerce.dao.entity.Cart;
+import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.entity.user.Admin;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.entity.user.Employee;
 import com.rustam.e_commerce.dao.entity.user.User;
-import com.rustam.e_commerce.dao.repository.BaseUserRepository;
-import com.rustam.e_commerce.dao.repository.CartRepository;
-import com.rustam.e_commerce.dao.repository.EmployeeRepository;
-import com.rustam.e_commerce.dao.repository.ProductRepository;
+import com.rustam.e_commerce.dao.repository.*;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
@@ -34,6 +32,7 @@ public class UtilService {
     private final JwtUtil jwtUtil;
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private final CartRepository cartRepository;
     private final RedisTemplate<String,String> redisTemplate;
 
@@ -117,5 +116,10 @@ public class UtilService {
     public boolean deleteRefreshToken(UUID id) {
         String redisKey = "refresh_token:" + id;
         return Boolean.TRUE.equals(redisTemplate.delete(redisKey));
+    }
+
+    public Category findByCategoryId(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException("No such category was found"));
     }
 }

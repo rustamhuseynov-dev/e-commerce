@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Repository
 public interface BaseUserRepository extends JpaRepository<BaseUser, UUID> {
-    @Query(value = "SELECT * FROM base_users WHERE user_type = 'USER' AND username = :username", nativeQuery = true)
+    @Query(value = "SELECT * FROM base_users WHERE user_type IN ('USER','ADMIN','EMPLOYEE') AND username = :username", nativeQuery = true)
     Optional<User> findByUsername(String username);
 
     @Query(value = "SELECT * from base_users where user_type = 'USER'",nativeQuery = true)
