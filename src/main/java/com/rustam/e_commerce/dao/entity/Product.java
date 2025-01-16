@@ -2,6 +2,7 @@ package com.rustam.e_commerce.dao.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -40,6 +41,7 @@ public class Product {
     private double price;
     private double discount;
     private double specialPrice;
+    private String userId;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
