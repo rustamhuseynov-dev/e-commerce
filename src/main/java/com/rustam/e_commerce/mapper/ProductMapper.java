@@ -23,4 +23,6 @@ public interface ProductMapper {
     List<ProductReadResponse> toResponses(List<Product> products);
 
     ProductUpdateResponse toUpdateResponse(Product product);
+
+    ProductReadResponse toReadResponse(Product product);
 }
