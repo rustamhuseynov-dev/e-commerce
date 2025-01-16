@@ -18,6 +18,6 @@ public class ProductUpdateResponse {
     private double price;
     private double discount;
     private double specialPrice;
-    private Category category;
+    private Long category;
     private String userId;
 }
