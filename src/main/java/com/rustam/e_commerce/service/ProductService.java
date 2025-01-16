@@ -5,6 +5,7 @@ import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.repository.ProductRepository;
 import com.rustam.e_commerce.dto.request.CreateProductRequest;
 import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
+import com.rustam.e_commerce.dto.request.ProductReadRequest;
 import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
 import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
@@ -78,5 +79,12 @@ public class ProductService {
         modelMapper.map(product,productDeleteResponse);
         productDeleteResponse.setText("This product has been deleted by you.");
         return productDeleteResponse;
+    }
+
+    public ProductReadResponse readById(ProductReadRequest productReadRequest) {
+        String currentUsername = utilService.getCurrentUsername();
+        utilService.validation(productReadRequest.getUserId(),currentUsername);
+        Product product = utilService.findByProductId(productReadRequest.getProductId());
+        return productMapper.toReadResponse(product);
     }
 }
