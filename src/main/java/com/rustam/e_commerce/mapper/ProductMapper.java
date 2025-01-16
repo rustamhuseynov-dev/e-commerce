@@ -3,6 +3,7 @@ package com.rustam.e_commerce.mapper;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
 import com.rustam.e_commerce.dto.response.ProductReadResponse;
+import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -20,4 +21,6 @@ public interface ProductMapper {
     CreateProductResponse toResponse(Product product);
 
     List<ProductReadResponse> toResponses(List<Product> products);
+
+    ProductUpdateResponse toUpdateResponse(Product product);
 }
