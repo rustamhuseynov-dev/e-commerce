@@ -2,6 +2,7 @@ package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.CreateProductRequest;
 import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
+import com.rustam.e_commerce.dto.request.ProductReadRequest;
 import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
 import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
@@ -30,6 +31,11 @@ public class ProductController {
     @GetMapping(path = "/read-product")
     public ResponseEntity<List<ProductReadResponse>> read(){
         return new ResponseEntity<>(productService.read(),HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/read-by-id/{id}")
+    public ResponseEntity<ProductReadResponse> readById(@RequestBody ProductReadRequest productReadRequest){
+        return new ResponseEntity<>(productService.readById(productReadRequest),HttpStatus.OK);
     }
 
     @PutMapping(path = "/update-product")
