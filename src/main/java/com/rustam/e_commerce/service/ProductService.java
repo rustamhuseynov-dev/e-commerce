@@ -4,8 +4,10 @@ import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.repository.ProductRepository;
 import com.rustam.e_commerce.dto.request.CreateProductRequest;
+import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
 import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
+import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
 import com.rustam.e_commerce.dto.response.ProductReadResponse;
 import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
 import com.rustam.e_commerce.mapper.ProductMapper;
@@ -13,6 +15,7 @@ import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +28,7 @@ public class ProductService {
     ProductRepository productRepository;
     ProductMapper productMapper;
     UtilService utilService;
+    ModelMapper modelMapper;
 
     public CreateProductResponse create(CreateProductRequest createProductRequest) {
         Category category = utilService.findByCategoryId(createProductRequest.getCategoryId());
@@ -62,5 +66,17 @@ public class ProductService {
         product.setCategory(category);
         productRepository.save(product);
         return productMapper.toUpdateResponse(product);
+    }
+
+
+    public ProductDeleteResponse delete(ProductDeleteRequest productDeleteRequest) {
+        Product product = utilService.findByProductId(productDeleteRequest.getProductId());
+        String currentUsername = utilService.getCurrentUsername();
+        utilService.validation(product.getUserId(),currentUsername);
+        productRepository.delete(product);
+        ProductDeleteResponse productDeleteResponse = new ProductDeleteResponse();
+        modelMapper.map(product,productDeleteResponse);
+        productDeleteResponse.setText("This product has been deleted by you.");
+        return productDeleteResponse;
     }
 }
