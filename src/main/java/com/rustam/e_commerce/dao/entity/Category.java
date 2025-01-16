@@ -25,7 +25,4 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade =  CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Product> products;
 }
