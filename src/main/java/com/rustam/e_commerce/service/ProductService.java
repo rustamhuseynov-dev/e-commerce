@@ -43,7 +43,7 @@ public class ProductService {
                 .userId(currentUsername)
                 .discount(createProductRequest.getDiscount())
                 .specialPrice(createProductRequest.getPrice() - result)
-                .category(category)
+                .category(category.getCategoryId())
                 .build();
         productRepository.save(product);
         return productMapper.toResponse(product);
@@ -60,13 +60,13 @@ public class ProductService {
         utilService.validation(product.getUserId(),currentUsername);
         Category category = utilService.findByCategoryId(productUpdateRequest.getCategoryId());
         double result = (productUpdateRequest.getPrice() * productUpdateRequest.getDiscount()) / 100;
-        product.setProductName(product.getProductName());
+        product.setProductName(productUpdateRequest.getProductName());
         product.setPrice(productUpdateRequest.getPrice());
         product.setDiscount(productUpdateRequest.getDiscount());
         product.setQuantity(productUpdateRequest.getQuantity());
         product.setDescription(productUpdateRequest.getDescription());
         product.setSpecialPrice(productUpdateRequest.getPrice() - result);
-        product.setCategory(category);
+        product.setCategory(category.getCategoryId());
         productRepository.save(product);
         return productMapper.toUpdateResponse(product);
     }
