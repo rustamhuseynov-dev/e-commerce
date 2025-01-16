@@ -34,11 +34,13 @@ public class ProductService {
     public CreateProductResponse create(CreateProductRequest createProductRequest) {
         Category category = utilService.findByCategoryId(createProductRequest.getCategoryId());
         double result = (createProductRequest.getPrice() * createProductRequest.getDiscount()) / 100;
+        String currentUsername = utilService.getCurrentUsername();
         Product product = Product.builder()
                 .productName(createProductRequest.getProductName())
                 .description(createProductRequest.getDescription())
                 .quantity(createProductRequest.getQuantity())
                 .price(createProductRequest.getPrice())
+                .userId(currentUsername)
                 .discount(createProductRequest.getDiscount())
                 .specialPrice(createProductRequest.getPrice() - result)
                 .category(category)
