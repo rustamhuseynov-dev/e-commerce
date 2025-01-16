@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductReadResponse {
+public class ProductUpdateResponse {
     private Long productId;
     private String productName;
     private String description;
@@ -19,4 +19,5 @@ public class ProductReadResponse {
     private double discount;
     private double specialPrice;
     private Long category;
+    private String userId;
 }
