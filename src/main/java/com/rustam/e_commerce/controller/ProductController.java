@@ -1,8 +1,10 @@
 package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.CreateProductRequest;
+import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
 import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
+import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
 import com.rustam.e_commerce.dto.response.ProductReadResponse;
 import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
 import com.rustam.e_commerce.service.ProductService;
@@ -34,6 +36,10 @@ public class ProductController {
     public ResponseEntity<ProductUpdateResponse> update(@RequestBody ProductUpdateRequest productUpdateRequest){
         return new ResponseEntity<>(productService.update(productUpdateRequest),HttpStatus.OK);
     }
-    
+
+    @DeleteMapping(path = "/delete-product")
+    public ResponseEntity<ProductDeleteResponse> delete(@RequestBody ProductDeleteRequest productDeleteRequest){
+        return new ResponseEntity<>(productService.delete(productDeleteRequest),HttpStatus.OK);
+    }
 
 }
