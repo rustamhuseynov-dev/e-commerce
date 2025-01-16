@@ -4,8 +4,10 @@ import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.repository.ProductRepository;
 import com.rustam.e_commerce.dto.request.CreateProductRequest;
+import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
 import com.rustam.e_commerce.dto.response.CreateProductResponse;
 import com.rustam.e_commerce.dto.response.ProductReadResponse;
+import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
 import com.rustam.e_commerce.mapper.ProductMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -43,5 +45,22 @@ public class ProductService {
     public List<ProductReadResponse> read() {
         List<Product> products = utilService.findAllProduct();
         return productMapper.toResponses(products);
+    }
+
+    public ProductUpdateResponse update(ProductUpdateRequest productUpdateRequest) {
+        Product product = utilService.findByProductId(productUpdateRequest.getProductId());
+        String currentUsername = utilService.getCurrentUsername();
+        utilService.validation(product.getUserId(),currentUsername);
+        Category category = utilService.findByCategoryId(productUpdateRequest.getCategoryId());
+        double result = (productUpdateRequest.getPrice() * productUpdateRequest.getDiscount()) / 100;
+        product.setProductName(product.getProductName());
+        product.setPrice(productUpdateRequest.getPrice());
+        product.setDiscount(productUpdateRequest.getDiscount());
+        product.setQuantity(productUpdateRequest.getQuantity());
+        product.setDescription(productUpdateRequest.getDescription());
+        product.setSpecialPrice(productUpdateRequest.getPrice() - result);
+        product.setCategory(category);
+        productRepository.save(product);
+        return productMapper.toUpdateResponse(product);
     }
 }
