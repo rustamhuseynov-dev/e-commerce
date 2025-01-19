@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrderCreateRequest {
+    private Long cartId;
+    private String email;
 }
