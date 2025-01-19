@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,5 +47,5 @@ public class Order {
     private Payment payment;
 
     private Double totalAmount;
-    private String orderStatus;
+    private OrderStatus orderStatus;
 }
