@@ -1,13 +1,7 @@
 package com.rustam.e_commerce.controller;
 
-import com.rustam.e_commerce.dto.request.CreateProductRequest;
-import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
-import com.rustam.e_commerce.dto.request.ProductReadRequest;
-import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
-import com.rustam.e_commerce.dto.response.CreateProductResponse;
-import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
-import com.rustam.e_commerce.dto.response.ProductReadResponse;
-import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
+import com.rustam.e_commerce.dto.request.*;
+import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +35,11 @@ public class ProductController {
     @PutMapping(path = "/update-product")
     public ResponseEntity<ProductUpdateResponse> update(@RequestBody ProductUpdateRequest productUpdateRequest){
         return new ResponseEntity<>(productService.update(productUpdateRequest),HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/product-quantity-to-increase")
+    public ResponseEntity<ProductQuantityToIncreaseResponse> productQuantityToIncrease(@RequestBody ProductQuantityToIncreaseRequest productQuantityToIncreaseRequest ){
+        return new ResponseEntity<>(productService.productQuantityToIncrease(productQuantityToIncreaseRequest),HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/delete-product")
