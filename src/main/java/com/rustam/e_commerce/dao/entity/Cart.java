@@ -1,5 +1,6 @@
 package com.rustam.e_commerce.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rustam.e_commerce.dao.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,8 @@ public class Cart {
     @Column(name = "user_id")
     private UUID user;
 
-    @OneToMany(mappedBy = "cart", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JsonManagedReference
     private List<CartItem> cartItems = new ArrayList<>();
 
     private double totalPrice;
