@@ -59,6 +59,14 @@ public class UtilService {
                 : new TokenPair();
     }
 
+    public void updateProductQuantity(Product product, int quantityToDeduct) {
+        if (product.getQuantity() < quantityToDeduct) {
+            throw new IllegalArgumentException("Insufficient product quantity!");
+        }
+        product.setQuantity(product.getQuantity() - quantityToDeduct);
+        productRepository.save(product);
+    }
+
     public BaseUser findById(UUID id) {
         return baseUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("No such user found."));
