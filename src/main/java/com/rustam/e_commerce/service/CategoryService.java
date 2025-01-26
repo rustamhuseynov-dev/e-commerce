@@ -10,10 +10,14 @@ import com.rustam.e_commerce.dto.response.CreateCategoryResponse;
 import com.rustam.e_commerce.dto.response.DeleteCategoryResponse;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
+import com.rustam.e_commerce.mapper.CategoryMapper;
+import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,8 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
     CategoryRepository categoryRepository;
+    UtilService utilService;
+    CategoryMapper categoryMapper;
 
     public CreateCategoryResponse create(CreateCategoryRequest createCategoryRequest) {
         Category category = Category.builder()
@@ -31,12 +37,26 @@ public class CategoryService {
     }
 
     public UpdateCategoryResponse update(UpdateCategoryRequest updateCategoryRequest) {
+        Category category = utilService.findByCategoryId(updateCategoryRequest.getCategoryId());
+        category.setCategoryName(updateCategoryRequest.getCategoryName());
+        categoryRepository.save(category);
+        return UpdateCategoryResponse.builder()
+                .categoryId(updateCategoryRequest.getCategoryId())
+                .categoryName(updateCategoryRequest.getCategoryName()).build();
     }
 
-    public ReadCategoryResponse read(ReadCategoryRequest readCategoryRequest) {
-        return null;
+    public List<ReadCategoryResponse> read(ReadCategoryRequest readCategoryRequest) {
+        List<Category> categories = categoryRepository.findAll();
+        return categoryMapper.toRead(categories);
     }
 
     public DeleteCategoryResponse delete(DeleteCategoryRequest deleteCategoryRequest) {
+        Category category = utilService.findByCategoryId(deleteCategoryRequest.getCategoryId());
+        categoryRepository.delete(category);
+        return DeleteCategoryResponse.builder()
+                .categoryId(deleteCategoryRequest.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .text("this category has been deleted")
+                .build();
     }
 }
