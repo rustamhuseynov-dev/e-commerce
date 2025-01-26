@@ -3,14 +3,9 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.repository.ProductRepository;
-import com.rustam.e_commerce.dto.request.CreateProductRequest;
-import com.rustam.e_commerce.dto.request.ProductDeleteRequest;
-import com.rustam.e_commerce.dto.request.ProductReadRequest;
-import com.rustam.e_commerce.dto.request.ProductUpdateRequest;
-import com.rustam.e_commerce.dto.response.CreateProductResponse;
-import com.rustam.e_commerce.dto.response.ProductDeleteResponse;
-import com.rustam.e_commerce.dto.response.ProductReadResponse;
-import com.rustam.e_commerce.dto.response.ProductUpdateResponse;
+import com.rustam.e_commerce.dto.request.*;
+import com.rustam.e_commerce.dto.response.*;
+import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
 import com.rustam.e_commerce.mapper.ProductMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -43,7 +38,7 @@ public class ProductService {
                 .userId(currentUsername)
                 .discount(createProductRequest.getDiscount())
                 .specialPrice(createProductRequest.getPrice() - result)
-                .category(category.getCategoryId())
+                .categoryId(category.getCategoryId())
                 .build();
         productRepository.save(product);
         return productMapper.toResponse(product);
@@ -66,7 +61,7 @@ public class ProductService {
         product.setQuantity(productUpdateRequest.getQuantity());
         product.setDescription(productUpdateRequest.getDescription());
         product.setSpecialPrice(productUpdateRequest.getPrice() - result);
-        product.setCategory(category.getCategoryId());
+        product.setCategoryId(category.getCategoryId());
         productRepository.save(product);
         return productMapper.toUpdateResponse(product);
     }
@@ -88,5 +83,23 @@ public class ProductService {
         utilService.validation(productReadRequest.getUserId(),currentUsername);
         Product product = utilService.findByProductId(productReadRequest.getProductId());
         return productMapper.toReadResponse(product);
+    }
+
+    public ProductQuantityToIncreaseResponse productQuantityToIncrease(ProductQuantityToIncreaseRequest productQuantityToIncreaseRequest) {
+        Product product = utilService.findByProductId(productQuantityToIncreaseRequest.getProductId());
+        Category category = utilService.findByCategoryId(productQuantityToIncreaseRequest.getCategoryId());
+        if (product.getCategoryId().equals(category.getCategoryId())){
+            product.setQuantity(product.getQuantity()+productQuantityToIncreaseRequest.getQuantity());
+        }else {
+            throw new NoAuthotiryException("You do not have the right to increase this product.");
+        }
+        productRepository.save(product);
+        return ProductQuantityToIncreaseResponse.builder()
+                .productId(productQuantityToIncreaseRequest.getProductId())
+                .productName(product.getProductName())
+                .category(category.getCategoryName())
+                .quantity(product.getQuantity())
+                .text("Your product has been successfully promoted.")
+                .build();
     }
 }
