@@ -3,9 +3,11 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.repository.CategoryRepository;
 import com.rustam.e_commerce.dto.request.CreateCategoryRequest;
+import com.rustam.e_commerce.dto.request.DeleteCategoryRequest;
 import com.rustam.e_commerce.dto.request.ReadCategoryRequest;
 import com.rustam.e_commerce.dto.request.UpdateCategoryRequest;
 import com.rustam.e_commerce.dto.response.CreateCategoryResponse;
+import com.rustam.e_commerce.dto.response.DeleteCategoryResponse;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
 import lombok.AccessLevel;
@@ -33,5 +35,8 @@ public class CategoryService {
 
     public ReadCategoryResponse read(ReadCategoryRequest readCategoryRequest) {
         return null;
+    }
+
+    public DeleteCategoryResponse delete(DeleteCategoryRequest deleteCategoryRequest) {
     }
 }
