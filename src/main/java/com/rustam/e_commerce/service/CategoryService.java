@@ -3,7 +3,11 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.Category;
 import com.rustam.e_commerce.dao.repository.CategoryRepository;
 import com.rustam.e_commerce.dto.request.CreateCategoryRequest;
+import com.rustam.e_commerce.dto.request.ReadCategoryRequest;
+import com.rustam.e_commerce.dto.request.UpdateCategoryRequest;
 import com.rustam.e_commerce.dto.response.CreateCategoryResponse;
+import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
+import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,5 +26,12 @@ public class CategoryService {
                 .build();
         categoryRepository.save(category);
         return CreateCategoryResponse.builder().categoryName(createCategoryRequest.getCategoryName()).build();
+    }
+
+    public UpdateCategoryResponse update(UpdateCategoryRequest updateCategoryRequest) {
+    }
+
+    public ReadCategoryResponse read(ReadCategoryRequest readCategoryRequest) {
+        return null;
     }
 }
