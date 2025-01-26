@@ -49,7 +49,6 @@ public class CartService {
                 .orElse(null);
         Product product = utilService.findByProductId(cartRequest.getProductId());
         utilService.updateProductQuantity(product,cartRequest.getQuantity());
-        double totalPrice = product.getPrice() * cartRequest.getQuantity();
         CartItem newItem = new CartItem();
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
@@ -58,12 +57,14 @@ public class CartService {
             newItem.setProduct(cartRequest.getProductId());
             newItem.setQuantity(cartRequest.getQuantity());
             newItem.setCart(cart);
-            newItem.setTotalPrice(totalPrice);
+            newItem.setTotalPrice(product.getPrice() * cartRequest.getQuantity());
             newItem.setPrice(product.getPrice());
             newItem.setProductName(product.getProductName());
             cart.getCartItems().add(newItem);
         }
-
+        double totalPrice = cart.getCartItems().stream()
+                .mapToDouble(CartItem::getTotalPrice)
+                .sum();
         cart.setTotalPrice(totalPrice);
         cartRepository.save(cart);
 
