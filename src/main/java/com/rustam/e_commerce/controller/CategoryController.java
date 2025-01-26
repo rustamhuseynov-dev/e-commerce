@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1/category")
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class CategoryController {
     }
 
     @GetMapping(path = "/read-category")
-    public ResponseEntity<ReadCategoryResponse> read(@RequestBody ReadCategoryRequest readCategoryRequest){
+    public ResponseEntity<List<ReadCategoryResponse>> read(@RequestBody ReadCategoryRequest readCategoryRequest){
         return new ResponseEntity<>(categoryService.read(readCategoryRequest),HttpStatus.OK);
     }
 
