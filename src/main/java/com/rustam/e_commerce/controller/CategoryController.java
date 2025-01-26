@@ -1,9 +1,11 @@
 package com.rustam.e_commerce.controller;
 
 import com.rustam.e_commerce.dto.request.CreateCategoryRequest;
+import com.rustam.e_commerce.dto.request.DeleteCategoryRequest;
 import com.rustam.e_commerce.dto.request.ReadCategoryRequest;
 import com.rustam.e_commerce.dto.request.UpdateCategoryRequest;
 import com.rustam.e_commerce.dto.response.CreateCategoryResponse;
+import com.rustam.e_commerce.dto.response.DeleteCategoryResponse;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
 import com.rustam.e_commerce.service.CategoryService;
@@ -24,13 +26,18 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.create(createCategoryRequest), HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/read-category")
+    public ResponseEntity<ReadCategoryResponse> read(@RequestBody ReadCategoryRequest readCategoryRequest){
+        return new ResponseEntity<>(categoryService.read(readCategoryRequest),HttpStatus.OK);
+    }
+
     @PutMapping(path = "/update-category")
     public ResponseEntity<UpdateCategoryResponse> update(@RequestBody UpdateCategoryRequest updateCategoryRequest){
         return new ResponseEntity<>(categoryService.update(updateCategoryRequest),HttpStatus.OK);
     }
 
-    @GetMapping(path = "/read-category")
-    public ResponseEntity<ReadCategoryResponse> read(@RequestBody ReadCategoryRequest readCategoryRequest){
-        return new ResponseEntity<>(categoryService.read(readCategoryRequest),HttpStatus.OK);
+    @DeleteMapping(path = "/delete-category")
+    public ResponseEntity<DeleteCategoryResponse> delete(@RequestBody DeleteCategoryRequest deleteCategoryRequest){
+        return new ResponseEntity<>(categoryService.delete(deleteCategoryRequest),HttpStatus.OK);
     }
 }
