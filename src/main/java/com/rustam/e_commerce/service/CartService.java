@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,37 +34,45 @@ public class CartService {
     CartMapper cartMapper;
     ModelMapper modelMapper;
 
+    @Transactional
     public CartResponse addToCart(CartRequest cartRequest) {
-        Optional<Cart> cartOptional = cartRepository.findByUser(cartRequest.getUserId());
-        Cart cart = new Cart();
-        if (cartOptional.isEmpty()){
-            cart.setUser(cartRequest.getUserId());
-        }
+        Cart cart = cartRepository.findByUser(cartRequest.getUserId())
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(cartRequest.getUserId());
+                    return newCart;
+                });
+
         CartItem existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().equals(cartRequest.getProductId()))
                 .findFirst()
                 .orElse(null);
+        Product product = utilService.findByProductId(cartRequest.getProductId());
+        utilService.updateProductQuantity(product,cartRequest.getQuantity());
 
-        if (existingItem != null){
+        if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
             existingItem.calculateTotalPrice();
-        }else {
+        } else {
             CartItem newItem = new CartItem();
             newItem.setProduct(cartRequest.getProductId());
             newItem.setQuantity(cartRequest.getQuantity());
-            Product product = utilService.findByProductId(cartRequest.getProductId());
-            newItem.setCart(cartOptional.get());
+            newItem.setCart(cart);
             newItem.setPrice(product.getPrice());
             newItem.setProductName(product.getProductName());
-
             cart.getCartItems().add(newItem);
         }
+
         cart.calculateTotalPrice();
         cartRepository.save(cart);
-        CartResponse.builder().message("Product added successfully!").build();
-        return cartMapper.toCart(cart);
 
+        return CartResponse.builder()
+                .items(cart.getCartItems())
+                .userId(cartRequest.getUserId())
+                .message("Product added successfully!")
+                .build();
     }
+
 
     public List<CartReadResponse> findAll() {
         List<Cart> carts = cartRepository.findAll();
