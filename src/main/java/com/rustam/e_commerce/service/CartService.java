@@ -48,7 +48,6 @@ public class CartService {
                 .findFirst()
                 .orElse(null);
         Product product = utilService.findByProductId(cartRequest.getProductId());
-        utilService.updateProductQuantity(product,cartRequest.getQuantity());
         CartItem newItem = new CartItem();
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
