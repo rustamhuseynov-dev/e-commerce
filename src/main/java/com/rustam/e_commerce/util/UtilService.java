@@ -134,4 +134,9 @@ public class UtilService {
     public List<Product> findAllProduct() {
         return productRepository.findAll();
     }
+
+    public Cart findByCartIdAndUserId(Long cartId, String userId) {
+        return cartRepository.findByIdAndUser(cartId,userId)
+                .orElseThrow(() -> new CartNotFoundException("No cart found for these hards"));
+    }
 }

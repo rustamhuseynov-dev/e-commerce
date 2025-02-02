@@ -1,5 +1,6 @@
-package com.rustam.e_commerce.dto.request;
+package com.rustam.e_commerce.dto.response;
 
+import com.rustam.e_commerce.dao.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderCreateRequest {
-    private Long cartId;
-    private String userId;
+public class CreatePaymentResponse {
+    private Long paymentId;
+    private Order order;
     private String paymentMethod;
 }

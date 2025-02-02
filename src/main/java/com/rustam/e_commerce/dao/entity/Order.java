@@ -35,7 +35,7 @@ public class Order {
 
     @Email
     @Column(nullable = false)
-    private String email;
+    private String userId;
 
     @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<>();
