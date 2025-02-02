@@ -3,6 +3,7 @@ package com.rustam.e_commerce.dao.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
 import jakarta.persistence.CascadeType;
@@ -33,9 +34,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Email
     @Column(nullable = false)
-    private String userId;
+    private UUID userId;
 
     @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<>();

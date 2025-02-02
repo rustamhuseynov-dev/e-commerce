@@ -3,6 +3,7 @@ package com.rustam.e_commerce.controller;
 import com.rustam.e_commerce.dto.request.OrderCreateRequest;
 import com.rustam.e_commerce.dto.response.OrderCreateResponse;
 import com.rustam.e_commerce.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(path = "/create-order")
-    public ResponseEntity<OrderCreateResponse> create(@RequestBody OrderCreateRequest orderCreateRequest){
+    public ResponseEntity<OrderCreateResponse> create(@Valid @RequestBody OrderCreateRequest orderCreateRequest){
         return new ResponseEntity<>(orderService.create(orderCreateRequest), HttpStatus.CREATED);
     }
 }

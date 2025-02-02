@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class PaymentService {
 
     PaymentRepository paymentRepository;
 
+    @Transactional
     public Payment createPayment(Order order, String paymentMethod) {
         Payment payment = Payment.builder()
                 .order(order)

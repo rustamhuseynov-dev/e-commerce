@@ -1,9 +1,12 @@
 package com.rustam.e_commerce.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderCreateRequest {
     private Long cartId;
-    private String userId;
+    @NotNull
+    private UUID userId;
     private String paymentMethod;
 }

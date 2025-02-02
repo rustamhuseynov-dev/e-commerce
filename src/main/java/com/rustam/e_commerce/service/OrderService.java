@@ -2,6 +2,7 @@ package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.*;
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
+import com.rustam.e_commerce.dao.repository.CartRepository;
 import com.rustam.e_commerce.dao.repository.OrderRepository;
 import com.rustam.e_commerce.dto.OrderItemDTO;
 import com.rustam.e_commerce.dto.request.OrderCreateRequest;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderService {
 
     OrderRepository orderRepository;
@@ -31,9 +33,12 @@ public class OrderService {
     PaymentService paymentService;
     CartService cartService;
     ModelMapper modelMapper;
+    OrderItemService orderItemService;
+    CartRepository cartRepository;
 
+    @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
-        Cart cart = utilService.findByCartIdAndUserId(orderCreateRequest.getCartId(),orderCreateRequest.getUserId());
+        Cart cart = utilService.findByCartIdAndUserId(orderCreateRequest.getCartId(), orderCreateRequest.getUserId());
 
         Order order = Order.builder()
                 .orderDate(LocalDate.now())
@@ -41,7 +46,6 @@ public class OrderService {
                 .totalAmount(cart.getTotalPrice())
                 .userId(orderCreateRequest.getUserId())
                 .build();
-
 
         Payment payment = paymentService.createPayment(order, orderCreateRequest.getPaymentMethod());
         order.setPayment(payment);
@@ -51,16 +55,20 @@ public class OrderService {
                 .map(cartItem -> createOrderItem(order, cartItem))
                 .toList();
 
+        orderItemService.save(orderItems);
+
         cart.getCartItems().forEach(item -> {
             Product product = utilService.findByProductId(item.getProduct());
-            product.setQuantity(product.getQuantity() - item.getQuantity());
             utilService.updateProductQuantity(product, item.getQuantity());
-            cartService.delete(orderCreateRequest.getCartId());
         });
+        cartService.delete(orderCreateRequest.getCartId());
 
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
+        orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
-        return orderMapper.toDto(order);
+        orderCreateRequest.setCartId(orderCreateRequest.getCartId());
+        orderCreateResponse.setTotalAmount(cart.getTotalPrice());
+        return orderCreateResponse;
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {
