@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderCreateRequest {
     private Long cartId;
-    private String email;
+    private String userId;
+    private String paymentMethod;
 }
