@@ -58,17 +58,16 @@ public class OrderService {
 
         orderItemService.save(orderItems);
 
-//        cart.getCartItems().forEach(item -> {
-//            Product product = utilService.findByProductId(item.getProduct().getProductId());
-//            utilService.updateProductQuantity(product, item.getQuantity());
-//        });
+        cart.getCartItems().forEach(item -> {
+            Product product = utilService.findByProductId(item.getProduct().getProductId());
+            utilService.updateProductQuantity(item.getQuantity(),product);
+        });
         utilService.cartClean(orderCreateRequest.getCartId());
 
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
-        orderCreateResponse.setTotalAmount(cart.getTotalPrice());
-        return orderCreateResponse;
+        return orderMapper.toDto(order);
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {
