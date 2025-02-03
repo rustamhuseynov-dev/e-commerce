@@ -19,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -58,14 +57,6 @@ public class UtilService {
                         .refreshToken(jwtUtil.createRefreshToken(String.valueOf(id)))
                         .build()
                 : new TokenPair();
-    }
-
-    public void updateProductQuantity(Product product, int quantityToDeduct) {
-        if (product.getQuantity() < quantityToDeduct) {
-            throw new IllegalArgumentException("Insufficient product quantity!");
-        }
-        product.setQuantity(product.getQuantity() - quantityToDeduct);
-        productRepository.save(product);
     }
 
     public BaseUser findById(UUID id) {
@@ -143,5 +134,13 @@ public class UtilService {
 
     public void cartClean(Long cartId) {
         cartRepository.deleteById(cartId);
+    }
+
+    public void updateProductQuantity(Integer totalQuantity, Product product) {
+        if (product.getQuantity() < totalQuantity) {
+            throw new IllegalArgumentException("Insufficient product quantity!");
+        }
+        product.setQuantity(product.getQuantity() - totalQuantity);
+        productRepository.save(product);
     }
 }
