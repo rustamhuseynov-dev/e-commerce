@@ -24,8 +24,10 @@ public class CartItem {
     @JsonIgnore
     private Cart cart;
 
-    @JoinColumn(name = "product_id")
-    private Long product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonIgnore // JSON serialization zamanı nəzərə almır
+    private Product product;
 
     private String productName;
     private Integer quantity;

@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -138,5 +139,9 @@ public class UtilService {
     public Cart findByCartIdAndUserId(Long cartId, UUID userId) {
         return cartRepository.findByIdAndUser(cartId,userId)
                 .orElseThrow(() -> new CartNotFoundException("No cart found for these hards"));
+    }
+
+    public void cartClean(Long cartId) {
+        cartRepository.deleteById(cartId);
     }
 }

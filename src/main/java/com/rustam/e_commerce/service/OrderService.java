@@ -2,6 +2,7 @@ package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.*;
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
+import com.rustam.e_commerce.dao.repository.CartItemRepository;
 import com.rustam.e_commerce.dao.repository.CartRepository;
 import com.rustam.e_commerce.dao.repository.OrderRepository;
 import com.rustam.e_commerce.dto.OrderItemDTO;
@@ -34,7 +35,7 @@ public class OrderService {
     CartService cartService;
     ModelMapper modelMapper;
     OrderItemService orderItemService;
-    CartRepository cartRepository;
+    CartItemRepository cartItemRepository;
 
     @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
@@ -57,23 +58,22 @@ public class OrderService {
 
         orderItemService.save(orderItems);
 
-        cart.getCartItems().forEach(item -> {
-            Product product = utilService.findByProductId(item.getProduct());
-            utilService.updateProductQuantity(product, item.getQuantity());
-        });
-        cartService.delete(orderCreateRequest.getCartId());
+//        cart.getCartItems().forEach(item -> {
+//            Product product = utilService.findByProductId(item.getProduct().getProductId());
+//            utilService.updateProductQuantity(product, item.getQuantity());
+//        });
+        utilService.cartClean(orderCreateRequest.getCartId());
 
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
-        orderCreateRequest.setCartId(orderCreateRequest.getCartId());
         orderCreateResponse.setTotalAmount(cart.getTotalPrice());
         return orderCreateResponse;
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setProduct(cartItem.getProduct());
+        orderItem.setProduct(cartItem.getProduct().getProductId());
         orderItem.setQuantity(cartItem.getQuantity());
         orderItem.setOrderedProductPrice(cartItem.getPrice());
         orderItem.setOrder(order);
