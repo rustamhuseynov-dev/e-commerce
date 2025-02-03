@@ -45,7 +45,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Long categoryId;
 
-    @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<CartItem> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.MERGE })

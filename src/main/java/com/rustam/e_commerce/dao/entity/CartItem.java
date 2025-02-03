@@ -24,9 +24,9 @@ public class CartItem {
     @JsonIgnore
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnore // JSON serialization zamanı nəzərə almır
+    @JsonIgnore
     private Product product;
 
     private String productName;
