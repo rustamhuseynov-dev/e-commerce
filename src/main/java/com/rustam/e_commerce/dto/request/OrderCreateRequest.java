@@ -16,5 +16,6 @@ public class OrderCreateRequest {
     private Long cartId;
     @NotNull
     private UUID userId;
+    private Long productId;
     private String paymentMethod;
 }
