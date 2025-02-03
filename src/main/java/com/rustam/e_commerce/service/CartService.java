@@ -53,7 +53,7 @@ public class CartService {
             existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
             existingItem.calculateTotalPrice();
         } else {
-            newItem.setProduct(cartRequest.getProductId());
+            newItem.setProduct(product);
             newItem.setQuantity(cartRequest.getQuantity());
             newItem.setCart(cart);
             newItem.setTotalPrice(product.getPrice() * cartRequest.getQuantity());
