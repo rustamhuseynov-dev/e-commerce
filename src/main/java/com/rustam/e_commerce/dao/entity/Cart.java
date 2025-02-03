@@ -27,12 +27,11 @@ public class Cart {
     @Column(name = "user_id")
     private UUID user;
 
-    @OneToMany(mappedBy = "cart", cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CartItem> cartItems = new ArrayList<>();
 
     private double totalPrice;
-
     public void calculateTotalPrice() {
         this.totalPrice = cartItems.stream()
                 .mapToDouble(CartItem::getTotalPrice)
