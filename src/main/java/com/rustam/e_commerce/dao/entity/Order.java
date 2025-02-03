@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,10 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "orders")
@@ -37,13 +36,17 @@ public class Order {
     @Column(nullable = false)
     private UUID userId;
 
-    @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @ToString.Exclude // Lombok-un sonsuz rekursiyanın qarşısını alır
+    @JsonIgnore // JSON serialization zamanı nəzərə almır
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDate orderDate;
 
     @OneToOne
     @JoinColumn(name = "payment_id")
+    @ToString.Exclude // Lombok-un sonsuz rekursiyanın qarşısını alır
+    @JsonIgnore // JSON serialization zamanı nəzərə almır
     private Payment payment;
 
     private Double totalAmount;
