@@ -2,6 +2,7 @@ package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.*;
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.CartItemRepository;
 import com.rustam.e_commerce.dao.repository.CartRepository;
 import com.rustam.e_commerce.dao.repository.OrderRepository;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,17 +32,14 @@ public class OrderService {
 
     OrderRepository orderRepository;
     UtilService utilService;
-    OrderMapper orderMapper;
     PaymentService paymentService;
-    CartService cartService;
     ModelMapper modelMapper;
     OrderItemService orderItemService;
-    CartItemRepository cartItemRepository;
 
     @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
         Cart cart = utilService.findByCartIdAndUserId(orderCreateRequest.getCartId(), orderCreateRequest.getUserId());
-
+        BaseUser user = utilService.findById(cart.getUser());
         Order order = Order.builder()
                 .orderDate(LocalDate.now())
                 .orderStatus(OrderStatus.SUCCESSFUL)
@@ -67,7 +66,12 @@ public class OrderService {
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
-        return orderMapper.toDto(order);
+        orderCreateResponse.setOrderDate(order.getOrderDate());
+        orderCreateResponse.setTotalAmount(order.getTotalAmount());
+        orderCreateResponse.setPayment(payment);
+        orderCreateResponse.setOrderStatus(OrderStatus.SUCCESSFUL);
+        orderCreateResponse.setEmail(user.getEmail());
+        return orderCreateResponse;
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {

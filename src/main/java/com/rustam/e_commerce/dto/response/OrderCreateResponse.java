@@ -2,6 +2,7 @@ package com.rustam.e_commerce.dto.response;
 
 import com.rustam.e_commerce.dao.entity.OrderItem;
 import com.rustam.e_commerce.dao.entity.Payment;
+import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -28,5 +29,5 @@ public class OrderCreateResponse {
     private Payment payment;
 
     private Double totalAmount;
-    private String orderStatus;
+    private OrderStatus orderStatus;
 }

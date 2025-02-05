@@ -46,10 +46,10 @@ public class Product {
     private Long categoryId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ToString.Exclude // Sonsuz rekursiyanın qarşısını alır
     private List<CartItem> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ToString.Exclude // Sonsuz rekursiyanın qarşısını alır
     private List<OrderItem> orderItems = new ArrayList<>();
-
-
 }
