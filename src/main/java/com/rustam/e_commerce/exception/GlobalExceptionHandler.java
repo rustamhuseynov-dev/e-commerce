@@ -46,6 +46,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(NotManyProductsException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(NotManyProductsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
+                HttpStatus.CONFLICT
+        );
+    }
+
     @ExceptionHandler(NoAuthotiryException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(NoAuthotiryException ex) {
         return new ResponseEntity<>(
