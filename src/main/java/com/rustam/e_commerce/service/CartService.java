@@ -10,6 +10,7 @@ import com.rustam.e_commerce.dto.response.CartDeleteResponse;
 import com.rustam.e_commerce.dto.response.CartReadResponse;
 import com.rustam.e_commerce.dto.response.CartResponse;
 import com.rustam.e_commerce.dto.response.CartUpdateResponse;
+import com.rustam.e_commerce.exception.custom.NotManyProductsException;
 import com.rustam.e_commerce.mapper.CartMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -19,10 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +46,9 @@ public class CartService {
                 .findFirst()
                 .orElse(null);
         Product product = utilService.findByProductId(cartRequest.getProductId());
+        if (!(product.getQuantity() >= cartRequest.getQuantity())){
+            throw new NotManyProductsException("Not many products");
+        }
         CartItem newItem = new CartItem();
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
