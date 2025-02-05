@@ -3,10 +3,7 @@ package com.rustam.e_commerce.dao.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rustam.e_commerce.dao.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class Cart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,12 +25,8 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @ToString.Exclude // Exclude cartItems to avoid recursion
     private List<CartItem> cartItems = new ArrayList<>();
 
     private double totalPrice;
-    public void calculateTotalPrice() {
-        this.totalPrice = cartItems.stream()
-                .mapToDouble(CartItem::getTotalPrice)
-                .sum();
-    }
 }
