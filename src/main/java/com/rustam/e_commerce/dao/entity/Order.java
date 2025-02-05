@@ -34,7 +34,7 @@ public class Order {
     private Long orderId;
 
     @Column(nullable = false)
-    private UUID userId;
+    private String userId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude // Lombok-un sonsuz rekursiyanın qarşısını alır
