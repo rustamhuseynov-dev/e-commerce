@@ -14,8 +14,7 @@ import java.util.UUID;
 @Builder
 public class OrderCreateRequest {
     private Long cartId;
-    @NotNull
-    private UUID userId;
+    private String userId;
     private Long productId;
     private String paymentMethod;
 }

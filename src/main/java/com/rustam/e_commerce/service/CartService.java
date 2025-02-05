@@ -3,6 +3,7 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.Cart;
 import com.rustam.e_commerce.dao.entity.CartItem;
 import com.rustam.e_commerce.dao.entity.Product;
+import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.repository.CartRepository;
 import com.rustam.e_commerce.dto.request.CartRequest;
 import com.rustam.e_commerce.dto.request.CartUpdateRequest;
@@ -20,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,48 +36,54 @@ public class CartService {
 
     @Transactional
     public CartResponse addToCart(CartRequest cartRequest) {
-        Cart cart = cartRepository.findByUser(cartRequest.getUserId())
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUser(cartRequest.getUserId());
-                    return newCart;
-                });
+        BaseUser user = utilService.findById(cartRequest.getUserId());
+        Cart cart = cartRepository.findByUser(user.getId())
+                .orElseGet(() -> Cart.builder()
+                        .user(user.getId())
+                        .cartItems(new ArrayList<>())
+                        .totalPrice(0)
+                        .build());
 
-        CartItem existingItem = cart.getCartItems().stream()
-                .filter(item -> item.getProduct().equals(cartRequest.getProductId()))
-                .findFirst()
-                .orElse(null);
         Product product = utilService.findByProductId(cartRequest.getProductId());
-        if (!(product.getQuantity() >= cartRequest.getQuantity())){
+
+        if (product.getQuantity() < cartRequest.getQuantity()) {
             throw new NotManyProductsException("Not many products");
         }
-        CartItem newItem = new CartItem();
-        if (existingItem != null) {
-            existingItem.setQuantity(existingItem.getQuantity() + cartRequest.getQuantity());
-            existingItem.calculateTotalPrice();
-        } else {
-            newItem.setProduct(product);
-            newItem.setQuantity(cartRequest.getQuantity());
-            newItem.setCart(cart);
-            newItem.setTotalPrice(product.getPrice() * cartRequest.getQuantity());
-            newItem.setPrice(product.getPrice());
-            newItem.setProductName(product.getProductName());
-            cart.getCartItems().add(newItem);
-        }
-        double totalPrice = cart.getCartItems().stream()
-                .mapToDouble(CartItem::getTotalPrice)
-                .sum();
-        cart.setTotalPrice(totalPrice);
+
+        CartItem cartItem = cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getProductId().equals(cartRequest.getProductId()))
+                .findFirst()
+                .orElseGet(() -> {
+                    CartItem newItem = CartItem.builder()
+                            .product(product)
+                            .quantity(0)
+                            .cart(cart)
+                            .price(product.getPrice())
+                            .productName(product.getProductName())
+                            .build();
+                    cart.getCartItems().add(newItem);
+                    return newItem;
+                });
+
+        cartItem.setQuantity(cartItem.getQuantity() + cartRequest.getQuantity());
+        cartItem.calculateTotalPrice();
+
+        updateCartTotalPrice(cart);
         cartRepository.save(cart);
 
         return CartResponse.builder()
                 .items(cart.getCartItems())
                 .userId(cartRequest.getUserId())
-                .totalPrice(totalPrice)
+                .totalPrice(cart.getTotalPrice())
                 .message("Product added successfully!")
                 .build();
     }
 
+    private void updateCartTotalPrice(Cart cart) {
+        cart.setTotalPrice(cart.getCartItems().stream()
+                .mapToDouble(CartItem::getTotalPrice)
+                .sum());
+    }
 
     public List<CartReadResponse> findAll() {
         List<Cart> carts = cartRepository.findAll();

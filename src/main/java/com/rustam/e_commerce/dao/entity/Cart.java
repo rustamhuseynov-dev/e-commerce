@@ -21,7 +21,7 @@ public class Cart {
     private Long id;
 
     @Column(name = "user_id")
-    private UUID user;
+    private String user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
