@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +39,8 @@ public class OrderService {
 
     @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
+        BaseUser user = utilService.findById(UUID.fromString(orderCreateRequest.getUserId()));
         Cart cart = utilService.findByCartIdAndUserId(orderCreateRequest.getCartId(), orderCreateRequest.getUserId());
-        BaseUser user = utilService.findById(cart.getUser());
         Order order = Order.builder()
                 .orderDate(LocalDate.now())
                 .orderStatus(OrderStatus.SUCCESSFUL)
