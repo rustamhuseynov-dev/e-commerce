@@ -18,6 +18,5 @@ public class CartResponse {
     private UUID userId;
     private List<CartItem> items;
     private double totalPrice;
-    private Integer totalQuantity;
     private String message;
 }
