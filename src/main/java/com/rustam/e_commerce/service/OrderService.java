@@ -66,8 +66,7 @@ public class OrderService {
             utilService.updateProductQuantity(item.getQuantity(),product);
         });
         utilService.cartClean(orderCreateRequest.getCartId());
-        StringBuilder stringBuilder = sendMailProduct(cart);
-        emailSendService.sendOrderConfirmationEmail(order.getEmail(), String.valueOf(stringBuilder));
+        emailSendService.sendOrderConfirmationEmail(order.getEmail());
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
@@ -77,21 +76,6 @@ public class OrderService {
         orderCreateResponse.setOrderStatus(OrderStatus.SUCCESSFUL);
         orderCreateResponse.setEmail(user.getEmail());
         return orderCreateResponse;
-    }
-
-    private StringBuilder sendMailProduct(Cart cart) {
-        StringBuilder productsDetails = new StringBuilder("<ul>");
-        cart.getCartItems().forEach(item -> {
-            productsDetails.append("<li>")
-                    .append(item.getProductName())
-                    .append(" - Quantity: ")
-                    .append(item.getQuantity())
-                    .append(" - Total Price: ")
-                    .append(item.getTotalPrice())
-                    .append("</li>");
-        });
-        productsDetails.append("</ul>");
-        return productsDetails;
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {
