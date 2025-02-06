@@ -36,17 +36,19 @@ public class Order {
     @Column(nullable = false)
     private String userId;
 
+    private String email;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @ToString.Exclude // Lombok-un sonsuz rekursiyanın qarşısını alır
-    @JsonIgnore // JSON serialization zamanı nəzərə almır
+    @ToString.Exclude
+    @JsonIgnore
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDate orderDate;
 
     @OneToOne
     @JoinColumn(name = "payment_id")
-    @ToString.Exclude // Lombok-un sonsuz rekursiyanın qarşısını alır
-    @JsonIgnore // JSON serialization zamanı nəzərə almır
+    @ToString.Exclude
+    @JsonIgnore
     private Payment payment;
 
     private Double totalAmount;

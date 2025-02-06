@@ -1,11 +1,9 @@
 package com.rustam.e_commerce.controller;
 
+import com.rustam.e_commerce.dto.request.EmailAndPasswordUpdateRequest;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
-import com.rustam.e_commerce.dto.response.UserCreateResponse;
-import com.rustam.e_commerce.dto.response.UserDeletedResponse;
-import com.rustam.e_commerce.dto.response.UserResponse;
-import com.rustam.e_commerce.dto.response.UserUpdateResponse;
+import com.rustam.e_commerce.dto.response.*;
 import com.rustam.e_commerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,11 @@ public class UserController {
     @PutMapping(path = "/update")
     public ResponseEntity<UserUpdateResponse> update(@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/update-email-and-password")
+    public ResponseEntity<EmailAndPasswordUpdateResponse> updateEmailAndPassword(@Valid @RequestBody EmailAndPasswordUpdateRequest emailAndPasswordUpdateRequest){
+        return new ResponseEntity<>(userService.updateEmailAndPassword(emailAndPasswordUpdateRequest),HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/delete/{id}")

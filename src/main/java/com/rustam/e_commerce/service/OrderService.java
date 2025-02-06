@@ -10,6 +10,7 @@ import com.rustam.e_commerce.dto.OrderItemDTO;
 import com.rustam.e_commerce.dto.request.OrderCreateRequest;
 import com.rustam.e_commerce.dto.response.CreatePaymentResponse;
 import com.rustam.e_commerce.dto.response.OrderCreateResponse;
+import com.rustam.e_commerce.dto.response.OrderReadResponse;
 import com.rustam.e_commerce.mapper.OrderMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -36,6 +37,7 @@ public class OrderService {
     PaymentService paymentService;
     ModelMapper modelMapper;
     OrderItemService orderItemService;
+    EmailSendService emailSendService;
 
     @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
@@ -46,6 +48,7 @@ public class OrderService {
                 .orderStatus(OrderStatus.SUCCESSFUL)
                 .totalAmount(cart.getTotalPrice())
                 .userId(orderCreateRequest.getUserId())
+                .email(user.getEmail())
                 .build();
 
         Payment payment = paymentService.createPayment(order, orderCreateRequest.getPaymentMethod());
@@ -63,7 +66,7 @@ public class OrderService {
             utilService.updateProductQuantity(item.getQuantity(),product);
         });
         utilService.cartClean(orderCreateRequest.getCartId());
-
+        emailSendService.sendOrderConfirmationEmail(order.getEmail());
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
@@ -83,4 +86,25 @@ public class OrderService {
         orderItem.setOrder(order);
         return orderItem;
     }
+
+    public List<OrderReadResponse> read() {
+        List<Order> orders = orderRepository.findAll();
+
+        return orders.stream()
+                .map(order -> OrderReadResponse.builder()
+                        .orderId(order.getOrderId())
+                        .orderDate(order.getOrderDate())
+                        .orderItems(order.getOrderItems().stream()
+                                .map(item -> modelMapper.map(item, OrderItem.class))
+                                .collect(Collectors.toList()))
+                        .email(order.getEmail())
+                        .userId(order.getUserId())
+                        .orderStatus(order.getOrderStatus())
+                        .totalAmount(order.getTotalAmount())
+                        .payment(order.getPayment())
+                        .text(order.getEmail() + ": This is a customer order.")
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
