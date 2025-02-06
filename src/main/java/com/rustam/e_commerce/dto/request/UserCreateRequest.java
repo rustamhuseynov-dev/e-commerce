@@ -21,7 +21,7 @@ public class UserCreateRequest {
     private String phone;
     @NotBlank(message = "The username column cannot be empty.")
     private String username;
-    @Pattern(regexp = "[a-z]+@[a-z]+\\.[a-z]{2,4}", message = "Enter your email address.")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Enter a valid email address.")
     private String email;
     @NotBlank(message = "The password column cannot be empty.")
     private String password;
