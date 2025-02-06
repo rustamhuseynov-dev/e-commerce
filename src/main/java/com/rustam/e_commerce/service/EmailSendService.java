@@ -16,7 +16,7 @@ public class EmailSendService {
 
     MailSenderUtil mailSenderUtil;
 
-    public void sendOrderConfirmationEmail(String toEmail,String subject){
-        mailSenderUtil.sendEmail(toEmail,subject,": Your order has been confirmed. Good luck.");
+    public void sendOrderConfirmationEmail(String toEmail){
+        mailSenderUtil.sendEmail(toEmail,"Rustam`s E-commerce",toEmail + " : Your order has been confirmed. Good luck.");
     }
 }
