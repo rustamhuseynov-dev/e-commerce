@@ -31,10 +31,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
                         x
-                                .requestMatchers("/api/v1/auth/**","/api/v1/user/create").permitAll()
+                                .requestMatchers("/api/v1/auth/**",
+                                        "/api/v1/user/create",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html/**")
+                                .permitAll()
                                 .requestMatchers("/api/v1/user/update-email-and-password").hasAuthority(Role.USER.getValue())
                                 .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
-                                .requestMatchers("/api/v1/admin/**","/api/v1/user/**").hasAuthority(Role.ADMIN.getValue())
+                                .requestMatchers("/api/v1/admin/**", "/api/v1/user/**").hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

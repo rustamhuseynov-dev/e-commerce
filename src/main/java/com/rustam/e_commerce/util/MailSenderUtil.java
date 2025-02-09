@@ -17,4 +17,13 @@ public class MailSenderUtil {
         message.setText(text);
         javaMailSender.send(message);
     }
+
+
+    public void sendEmail(String email, String code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Email Verification Code");
+        message.setText("Your verification code: " + code);
+        javaMailSender.send(message);
+    }
 }

@@ -3,8 +3,10 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.dto.request.AuthRequest;
+import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
 import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
 import com.rustam.e_commerce.dto.response.AuthResponse;
+import com.rustam.e_commerce.dto.response.EmailVerificationResponse;
 import com.rustam.e_commerce.exception.custom.IncorrectPasswordException;
 import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.util.UserDetailsServiceImpl;
@@ -14,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +35,8 @@ public class AuthService {
     PasswordEncoder passwordEncoder;
     RedisTemplate<String,String> redisTemplate;
     JwtUtil jwtUtil;
+    EmailSendService emailSendService;
+    ModelMapper modelMapper;
 
     public AuthResponse login(AuthRequest authRequest) {
         BaseUser baseUser = utilService.findByUsername(authRequest.getUsername());
@@ -72,5 +77,13 @@ public class AuthService {
         else {
             throw new UnauthorizedException("An error occurred while logging out.");
         }
+    }
+
+    public EmailVerificationResponse emailVerification(EmailVerificationRequest emailVerificationRequest) {
+        emailSendService.verificationCodeEqualsRequestCode(emailVerificationRequest);
+        EmailVerificationResponse emailVerificationResponse = new EmailVerificationResponse();
+        modelMapper.map(emailVerificationRequest,emailVerificationResponse);
+        emailVerificationResponse.setText("Verification was successful.");
+        return emailVerificationResponse;
     }
 }

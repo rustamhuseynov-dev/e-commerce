@@ -46,6 +46,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmailVerificationProcessFailedException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(EmailVerificationProcessFailedException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
+                HttpStatus.CONFLICT
+        );
+    }
+
     @ExceptionHandler(NotManyProductsException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(NotManyProductsException ex) {
         return new ResponseEntity<>(
