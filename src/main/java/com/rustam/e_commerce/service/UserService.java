@@ -35,6 +35,7 @@ public class UserService {
     UtilService utilService;
     UserMapper userMapper;
     ModelMapper modelMapper;
+    EmailSendService emailSendService;
 
     public UserCreateResponse create(UserCreateRequest userCreateRequest) {
         User user = User.builder()
@@ -48,6 +49,7 @@ public class UserService {
                 .authorities(Collections.singleton(Role.USER))
                 .build();
         baseUserRepository.save(user);
+        emailSendService.verificationCode(userCreateRequest.getEmail());
         return userMapper.toResponse(user);
     }
 
