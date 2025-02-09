@@ -2,8 +2,10 @@ package com.rustam.e_commerce.controller;
 
 
 import com.rustam.e_commerce.dto.request.AuthRequest;
+import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
 import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
 import com.rustam.e_commerce.dto.response.AuthResponse;
+import com.rustam.e_commerce.dto.response.EmailVerificationResponse;
 import com.rustam.e_commerce.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,11 @@ public class AuthController {
     @DeleteMapping(path = "/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
         return new ResponseEntity<>(authService.logout(refreshTokenRequest),HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/email-verification")
+    public ResponseEntity<EmailVerificationResponse> emailVerification(@RequestBody EmailVerificationRequest emailVerificationRequest){
+        return new ResponseEntity<>(authService.emailVerification(emailVerificationRequest),HttpStatus.ACCEPTED);
     }
 
 }
