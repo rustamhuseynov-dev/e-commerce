@@ -36,6 +36,7 @@ dependencies {
 	implementation "io.jsonwebtoken:jjwt-impl:0.11.2"
 	implementation "com.fasterxml.uuid:java-uuid-generator:4.0.1"
 	implementation "io.jsonwebtoken:jjwt-jackson:0.11.2"
+	implementation 'org.springframework.retry:spring-retry'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
