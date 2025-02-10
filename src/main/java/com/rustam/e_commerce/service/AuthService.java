@@ -7,6 +7,7 @@ import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
 import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
 import com.rustam.e_commerce.dto.response.AuthResponse;
 import com.rustam.e_commerce.dto.response.EmailVerificationResponse;
+import com.rustam.e_commerce.exception.custom.EmailVerificationProcessFailedException;
 import com.rustam.e_commerce.exception.custom.IncorrectPasswordException;
 import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.util.UserDetailsServiceImpl;
