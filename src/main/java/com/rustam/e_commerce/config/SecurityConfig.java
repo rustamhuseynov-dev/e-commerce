@@ -31,15 +31,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
                         x
-                                .requestMatchers("/api/v1/auth/**",
-                                        "/api/v1/user/create",
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html/**")
-                                .permitAll()
-                                .requestMatchers("/api/v1/user/update-email-and-password").hasAuthority(Role.USER.getValue())
+                                .requestMatchers(getPublicEndpoints()).permitAll()
+                                .requestMatchers(getUserRoleEndpoints()).hasAuthority(Role.USER.getValue())
                                 .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
-                                .requestMatchers("/api/v1/admin/**", "/api/v1/user/**").hasAuthority(Role.ADMIN.getValue())
+                                .requestMatchers(getAdminRoleEndpoints()).hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -48,6 +43,40 @@ public class SecurityConfig {
                 .httpBasic(withDefaults())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .build();
+    }
+
+    private String[] getPublicEndpoints() {
+        return new String[]{
+                "/api/v1/auth/login",
+                "/api/v1/user/create",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html/**"
+        };
+    }
+
+    private String[] getUserRoleEndpoints() {
+        return new String[]{
+                "/api/v1/auth/**",
+                "/api/v1/user/update-email-and-password",
+                "/api/v1/user/update",
+                "/api/v1/user/delete/{id}",
+                "/api/v1/cart/**",
+                "/api/v1/order/**"
+        };
+    }
+
+    private String[] getAdminRoleEndpoints() {
+        return new String[]{
+                "/api/v1/admin/**",
+                "/api/v1/auth/**",
+                "/api/v1/cart/**",
+                "/api/v1/category/**",
+                "/api/v1/employee/**",
+                "/api/v1/order/**",
+                "/api/v1/product/**",
+                "/api/v1/user/**",
+        };
     }
 
 }
