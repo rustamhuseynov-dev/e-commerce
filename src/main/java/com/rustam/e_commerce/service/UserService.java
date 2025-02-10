@@ -45,11 +45,11 @@ public class UserService {
                 .email(userCreateRequest.getEmail())
                 .password(passwordEncoder.encode(userCreateRequest.getPassword()))
                 .phone(userCreateRequest.getPhone())
-                .enabled(true)
+                .enabled(false)
                 .authorities(Collections.singleton(Role.USER))
                 .build();
         baseUserRepository.save(user);
-        emailSendService.verificationCode(userCreateRequest.getEmail());
+        emailSendService.sendVerificationCode(userCreateRequest.getEmail());
         return userMapper.toResponse(user);
     }
 
