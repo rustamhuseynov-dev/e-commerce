@@ -143,4 +143,11 @@ public class UtilService {
         product.setQuantity(product.getQuantity() - totalQuantity);
         productRepository.save(product);
     }
+
+    public void findByUserEmail(String email) {
+        User user = baseUserRepository.findByEmail(email).
+                orElseThrow(() -> new UserNotFoundException("No such user found."));
+        user.setEnabled(true);
+        baseUserRepository.save(user);
+    }
 }
