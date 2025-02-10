@@ -18,6 +18,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -47,11 +48,22 @@ public class EmailSendService {
 
     public void verificationCodeEqualsRequestCode(EmailVerificationRequest emailVerificationRequest) {
         String cachedCode = redisTemplate.opsForValue().get(emailVerificationRequest.getEmail());
-        if (cachedCode != null && cachedCode.equals(emailVerificationRequest.getVerificationCode())) {
+        if (cachedCode == null) {
+            String newVerificationCode = generateVerificationCode();
+            redisTemplate.opsForValue().set(emailVerificationRequest.getEmail(), newVerificationCode, Duration.ofMinutes(5));
+
+            sendVerificationEmail(emailVerificationRequest.getEmail(), newVerificationCode);
+            throw new EmailVerificationProcessFailedException("The verification code expired. A new code has been sent to your email.");
+        }
+        if (cachedCode.equals(emailVerificationRequest.getVerificationCode())) {
             utilService.findByUserEmail(emailVerificationRequest.getEmail());
             redisTemplate.delete(emailVerificationRequest.getEmail());
-        }else {
+        } else {
             throw new EmailVerificationProcessFailedException("The Email Verification Process Failed");
         }
+    }
+
+    private void sendVerificationEmail(String email, String newVerificationCode) {
+        mailSenderUtil.sendEmail(email,newVerificationCode);
     }
 }
