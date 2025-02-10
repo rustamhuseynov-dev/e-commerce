@@ -44,6 +44,9 @@ public class AuthService {
         if (!passwordEncoder.matches(authRequest.getPassword(), baseUser.getPassword())) {
             throw new IncorrectPasswordException("password does not match");
         }
+        if (!baseUser.getEnabled()){
+            throw new EmailVerificationProcessFailedException("You need to confirm your email");
+        }
         UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(baseUser.getId()));
         TokenPair tokenPair = utilService.tokenProvider(baseUser.getId(), userDetails);
         String redisKey = "refresh_token:" + baseUser.getId();
