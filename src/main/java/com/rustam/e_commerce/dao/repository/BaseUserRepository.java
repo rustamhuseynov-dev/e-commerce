@@ -21,4 +21,6 @@ public interface BaseUserRepository extends JpaRepository<BaseUser, UUID> {
 
     @Query(value = "SELECT * from base_users where user_type = 'ADMIN'",nativeQuery = true)
     List<Admin> findAllAdmin();
+
+    Optional<User> findByEmail(String email);
 }
