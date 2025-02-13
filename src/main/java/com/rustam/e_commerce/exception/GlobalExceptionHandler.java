@@ -46,6 +46,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IncompatibilityOccurredException.class)
+    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(IncompatibilityOccurredException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
+                HttpStatus.CONFLICT
+        );
+    }
+
     @ExceptionHandler(EmailVerificationProcessFailedException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(EmailVerificationProcessFailedException ex) {
         return new ResponseEntity<>(

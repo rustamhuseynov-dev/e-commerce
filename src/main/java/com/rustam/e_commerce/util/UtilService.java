@@ -11,7 +11,9 @@ import com.rustam.e_commerce.dao.repository.*;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -26,15 +28,16 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class UtilService {
 
-    private final BaseUserRepository baseUserRepository;
-    private final JwtUtil jwtUtil;
-    private final EmployeeRepository employeeRepository;
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-    private final CartRepository cartRepository;
-    private final RedisTemplate<String,String> redisTemplate;
+    BaseUserRepository baseUserRepository;
+    JwtUtil jwtUtil;
+    EmployeeRepository employeeRepository;
+    ProductRepository productRepository;
+    CategoryRepository categoryRepository;
+    CartRepository cartRepository;
+    RedisTemplate<String,String> redisTemplate;
 
     public BaseUser findByUsername(String username) {
         return baseUserRepository.findByUsername(username)
@@ -149,5 +152,10 @@ public class UtilService {
                 orElseThrow(() -> new UserNotFoundException("No such user found."));
         user.setEnabled(true);
         baseUserRepository.save(user);
+    }
+
+    public BaseUser findByEmail(String email) {
+        return baseUserRepository.findByEmail(email).
+                orElseThrow(() -> new UserNotFoundException("No such user found."));
     }
 }

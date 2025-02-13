@@ -1,13 +1,14 @@
 package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.repository.BaseUserRepository;
 import com.rustam.e_commerce.dto.TokenPair;
-import com.rustam.e_commerce.dto.request.AuthRequest;
-import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
-import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
+import com.rustam.e_commerce.dto.request.*;
 import com.rustam.e_commerce.dto.response.AuthResponse;
 import com.rustam.e_commerce.dto.response.EmailVerificationResponse;
+import com.rustam.e_commerce.dto.response.ResetPasswordResponse;
 import com.rustam.e_commerce.exception.custom.EmailVerificationProcessFailedException;
+import com.rustam.e_commerce.exception.custom.IncompatibilityOccurredException;
 import com.rustam.e_commerce.exception.custom.IncorrectPasswordException;
 import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.util.UserDetailsServiceImpl;
@@ -35,6 +36,7 @@ public class AuthService {
     UserDetailsServiceImpl userDetailsService;
     PasswordEncoder passwordEncoder;
     RedisTemplate<String,String> redisTemplate;
+    BaseUserRepository baseUserRepository;
     JwtUtil jwtUtil;
     EmailSendService emailSendService;
     ModelMapper modelMapper;
@@ -89,5 +91,25 @@ public class AuthService {
         modelMapper.map(emailVerificationRequest,emailVerificationResponse);
         emailVerificationResponse.setText("Verification was successful.");
         return emailVerificationResponse;
+    }
+
+    public String forgotYourPassword(ForgotYourPasswordRequest forgotYourPasswordRequest) {
+        emailSendService.sendEmailToChangePassword(forgotYourPasswordRequest);
+        return "";
+    }
+
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
+        BaseUser user = utilService.findByEmail(resetPasswordRequest.getEmail());
+        if (resetPasswordRequest.getNewPassword().equals(resetPasswordRequest.getAgainPassword())) {
+            user.setPassword(passwordEncoder.encode(resetPasswordRequest.getAgainPassword()));
+        }else {
+            throw new IncompatibilityOccurredException("The entered passwords do not match");
+        }
+        baseUserRepository.save(user);
+        return ResetPasswordResponse.builder()
+                .email(resetPasswordRequest.getEmail())
+                .newPassword(resetPasswordRequest.getNewPassword())
+                .text("The password was successfully changed.")
+                .build();
     }
 }

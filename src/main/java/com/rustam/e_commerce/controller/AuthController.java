@@ -1,11 +1,10 @@
 package com.rustam.e_commerce.controller;
 
 
-import com.rustam.e_commerce.dto.request.AuthRequest;
-import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
-import com.rustam.e_commerce.dto.request.RefreshTokenRequest;
+import com.rustam.e_commerce.dto.request.*;
 import com.rustam.e_commerce.dto.response.AuthResponse;
 import com.rustam.e_commerce.dto.response.EmailVerificationResponse;
+import com.rustam.e_commerce.dto.response.ResetPasswordResponse;
 import com.rustam.e_commerce.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +39,13 @@ public class AuthController {
         return new ResponseEntity<>(authService.emailVerification(emailVerificationRequest),HttpStatus.ACCEPTED);
     }
 
+    @PostMapping(path = "/forgot-your-password")
+    public ResponseEntity<String> forgotYourPassword(@RequestBody ForgotYourPasswordRequest forgotYourPasswordRequest){
+        return new ResponseEntity<>(authService.forgotYourPassword(forgotYourPasswordRequest),HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping(path = "/reset-password")
+    public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        return new ResponseEntity<>(authService.resetPassword(resetPasswordRequest),HttpStatus.ACCEPTED);
+    }
 }
