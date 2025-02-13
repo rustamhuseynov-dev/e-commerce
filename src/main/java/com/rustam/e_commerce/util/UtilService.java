@@ -150,4 +150,9 @@ public class UtilService {
         user.setEnabled(true);
         baseUserRepository.save(user);
     }
+
+    public BaseUser findByEmail(String email) {
+        return baseUserRepository.findByEmail(email).
+                orElseThrow(() -> new UserNotFoundException("No such user found."));
+    }
 }
