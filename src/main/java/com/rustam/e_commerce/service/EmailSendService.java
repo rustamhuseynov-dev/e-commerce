@@ -2,6 +2,7 @@ package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.config.RedisTemplateConfig;
 import com.rustam.e_commerce.dto.request.EmailVerificationRequest;
+import com.rustam.e_commerce.dto.request.ForgotYourPasswordRequest;
 import com.rustam.e_commerce.exception.custom.EmailVerificationProcessFailedException;
 import com.rustam.e_commerce.util.MailSenderUtil;
 import com.rustam.e_commerce.util.UtilService;
@@ -32,7 +33,7 @@ public class EmailSendService {
     UtilService utilService;
 
     public void sendOrderConfirmationEmail(String toEmail){
-        mailSenderUtil.sendEmail(toEmail,"Rustam`s E-commerce",toEmail + " : Your order has been confirmed. Good luck.");
+        mailSenderUtil.sendEmail(toEmail,"AlWayGo",toEmail + " : Your order has been confirmed. Good luck.");
     }
 
     @Retryable(value = EmailVerificationProcessFailedException.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
@@ -65,5 +66,9 @@ public class EmailSendService {
 
     private void sendVerificationEmail(String email, String newVerificationCode) {
         mailSenderUtil.sendEmail(email,newVerificationCode);
+    }
+
+    public void sendEmailToChangePassword(ForgotYourPasswordRequest forgotYourPasswordRequest) {
+        mailSenderUtil.sendEmail(forgotYourPasswordRequest.getEmail(),"");
     }
 }
