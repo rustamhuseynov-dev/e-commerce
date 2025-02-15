@@ -110,6 +110,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<ExceptionResponseMessages> usernameExistsException(UsernameExistsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT) ,
+                HttpStatus.CONFLICT
+        );
+    }
+
 
 
     // Validation exceptions
