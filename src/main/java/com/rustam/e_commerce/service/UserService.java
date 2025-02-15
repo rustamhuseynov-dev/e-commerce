@@ -110,4 +110,11 @@ public class UserService {
         emailAndPasswordUpdateResponse.setText("Email and Password change successfully");
         return emailAndPasswordUpdateResponse;
     }
+
+    public UserResponse findById(UUID userId) {
+        String currentUsername = utilService.getCurrentUsername();
+        User user = (User) utilService.findById(userId);
+        utilService.validation(currentUsername,user.getId());
+        return userMapper.toDto(user);
+    }
 }
