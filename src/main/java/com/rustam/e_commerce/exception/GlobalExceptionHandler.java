@@ -23,7 +23,7 @@ import java.util.Set;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(UsernameNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseMessages> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
                 HttpStatus.NOT_FOUND
@@ -33,53 +33,53 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(IncorrectPasswordException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.UNAUTHORIZED),
+                HttpStatus.UNAUTHORIZED
         );
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(UserNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseMessages> userNotFoundException(UserNotFoundException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND),
+                HttpStatus.NOT_FOUND
         );
     }
 
     @ExceptionHandler(IncompatibilityOccurredException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(IncompatibilityOccurredException ex) {
+    public ResponseEntity<ExceptionResponseMessages> incompatibilityOccurredException(IncompatibilityOccurredException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.BAD_REQUEST),
+                HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(EmailVerificationProcessFailedException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(EmailVerificationProcessFailedException ex) {
+    public ResponseEntity<ExceptionResponseMessages> emailVerificationProcessFailedException(EmailVerificationProcessFailedException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.UNAUTHORIZED),
+                HttpStatus.UNAUTHORIZED
         );
     }
 
     @ExceptionHandler(NotManyProductsException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(NotManyProductsException ex) {
+    public ResponseEntity<ExceptionResponseMessages> notManyProductsException(NotManyProductsException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND),
+                HttpStatus.NOT_FOUND
         );
     }
 
     @ExceptionHandler(NoAuthotiryException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(NoAuthotiryException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT),
-                HttpStatus.CONFLICT
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.FORBIDDEN),
+                HttpStatus.FORBIDDEN
         );
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(ProductNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseMessages> productNotFoundException(ProductNotFoundException ex) {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
                 HttpStatus.NOT_FOUND
@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(CartNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseMessages> cartNotFoundException(CartNotFoundException ex) {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
                 HttpStatus.NOT_FOUND
@@ -95,10 +95,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<ExceptionResponseMessages> handleUserNotFoundException(CategoryNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseMessages> categoryNotFoundException(CategoryNotFoundException ex) {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<ExceptionResponseMessages> emailExistsException(EmailExistsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT) ,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<ExceptionResponseMessages> usernameExistsException(UsernameExistsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT) ,
+                HttpStatus.CONFLICT
         );
     }
 

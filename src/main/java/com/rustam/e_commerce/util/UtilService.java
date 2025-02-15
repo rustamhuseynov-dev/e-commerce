@@ -11,6 +11,7 @@ import com.rustam.e_commerce.dao.repository.*;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -157,5 +158,13 @@ public class UtilService {
     public BaseUser findByEmail(String email) {
         return baseUserRepository.findByEmail(email).
                 orElseThrow(() -> new UserNotFoundException("No such user found."));
+    }
+
+    public boolean findByEmailExists(String email) {
+        return baseUserRepository.existsBaseUserByEmail(email);
+    }
+
+    public boolean findByUsernameExists(String username){
+        return baseUserRepository.findByUsername(username).isPresent();
     }
 }

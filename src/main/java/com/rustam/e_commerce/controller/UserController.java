@@ -31,6 +31,11 @@ public class UserController {
         return new ResponseEntity<>(userService.read(),HttpStatus.ACCEPTED);
     }
 
+    @GetMapping(path = "/read-by-id/{id}")
+    public ResponseEntity<UserResponse> readById(@PathVariable UUID id){
+        return new ResponseEntity<>(userService.findById(id),HttpStatus.OK);
+    }
+
     @PutMapping(path = "/update")
     public ResponseEntity<UserUpdateResponse> update(@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);

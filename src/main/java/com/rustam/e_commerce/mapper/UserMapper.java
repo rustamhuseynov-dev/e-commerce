@@ -26,4 +26,6 @@ public interface UserMapper {
     List<UserResponse> toResponses(List<User> users);
 
     UserUpdateResponse toUpdated(BaseUser user);
+
+    UserResponse toDto(User user);
 }
