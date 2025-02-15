@@ -9,6 +9,7 @@ import com.rustam.e_commerce.dto.request.EmailAndPasswordUpdateRequest;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.*;
+import com.rustam.e_commerce.exception.EmailExistsException;
 import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.exception.custom.UnauthorizedException;
 import com.rustam.e_commerce.mapper.UserMapper;
@@ -38,6 +39,10 @@ public class UserService {
     EmailSendService emailSendService;
 
     public UserCreateResponse create(UserCreateRequest userCreateRequest) {
+        boolean emailExists = utilService.findByEmailExists(userCreateRequest.getEmail());
+        if (emailExists){
+            throw new EmailExistsException("This email already exists in the database.");
+        }
         User user = User.builder()
                 .name(userCreateRequest.getName())
                 .surname(userCreateRequest.getSurname())
