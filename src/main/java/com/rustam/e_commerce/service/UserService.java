@@ -9,12 +9,12 @@ import com.rustam.e_commerce.dto.request.EmailAndPasswordUpdateRequest;
 import com.rustam.e_commerce.dto.request.UserCreateRequest;
 import com.rustam.e_commerce.dto.request.UserUpdateRequest;
 import com.rustam.e_commerce.dto.response.*;
-import com.rustam.e_commerce.exception.EmailExistsException;
+import com.rustam.e_commerce.exception.custom.EmailExistsException;
 import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.exception.custom.UnauthorizedException;
+import com.rustam.e_commerce.exception.custom.UsernameExistsException;
 import com.rustam.e_commerce.mapper.UserMapper;
 import com.rustam.e_commerce.util.UtilService;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -40,6 +40,10 @@ public class UserService {
 
     public UserCreateResponse create(UserCreateRequest userCreateRequest) {
         boolean emailExists = utilService.findByEmailExists(userCreateRequest.getEmail());
+        boolean usernameExists = utilService.findByUsernameExists(userCreateRequest.getUsername());
+        if (usernameExists){
+            throw new UsernameExistsException("This username already exists in the database.");
+        }
         if (emailExists){
             throw new EmailExistsException("This email already exists in the database.");
         }
