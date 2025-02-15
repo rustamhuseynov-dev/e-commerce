@@ -61,6 +61,7 @@ public class SecurityConfig {
                 "/api/v1/user/update-email-and-password",
                 "/api/v1/user/update",
                 "/api/v1/user/delete/{id}",
+                "/api/v1/user/read-by-id/{id}",
                 "/api/v1/cart/**",
                 "/api/v1/order/**"
         };
