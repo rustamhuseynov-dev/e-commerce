@@ -102,6 +102,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<ExceptionResponseMessages> emailExistsException(EmailExistsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT) ,
+                HttpStatus.CONFLICT
+        );
+    }
+
 
 
     // Validation exceptions
