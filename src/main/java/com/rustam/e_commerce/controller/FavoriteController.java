@@ -18,7 +18,7 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-    @PostMapping(path = "add-to-favorites")
+    @PostMapping(path = "/add-to-favorites")
     public ResponseEntity<AddToFavoriteResponse> addToFavorite(@RequestBody AddToFavoriteRequest addToFavoriteRequest){
         return new ResponseEntity<>(favoriteService.addToFavorite(addToFavoriteRequest), HttpStatus.OK);
     }
