@@ -7,6 +7,8 @@ import com.rustam.e_commerce.dao.repository.FavoriteRepository;
 import com.rustam.e_commerce.dto.request.AddToFavoriteRequest;
 import com.rustam.e_commerce.dto.request.ReadFavoritesRequest;
 import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
+import com.rustam.e_commerce.dto.response.DeleteFavoritesResponse;
+import com.rustam.e_commerce.dto.response.DeletedFavorite;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
 import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
 import com.rustam.e_commerce.mapper.FavoriteMapper;
@@ -53,5 +55,17 @@ public class FavoriteService {
             throw new NoAuthotiryException("This favorites table does not belong to you.");
         }
         return favoriteMapper.toDtos(userFavorites);
+    }
+
+    public DeleteFavoritesResponse deleteFavorites(Long id) {
+        String currentUsername = utilService.getCurrentUsername();
+        Favorite favorite = utilService.findByFavoriteId(id);
+        utilService.validation(currentUsername,favorite.getUserId());
+        favoriteRepository.delete(favorite);
+        DeletedFavorite deleteDto = favoriteMapper.toDeleteDto(favorite);
+        return DeleteFavoritesResponse.builder()
+                .message("removed from favorites")
+                .deletedFavorite(deleteDto)
+                .build();
     }
 }
