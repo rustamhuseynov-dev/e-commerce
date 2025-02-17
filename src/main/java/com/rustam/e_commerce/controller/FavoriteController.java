@@ -3,6 +3,7 @@ package com.rustam.e_commerce.controller;
 import com.rustam.e_commerce.dto.request.AddToFavoriteRequest;
 import com.rustam.e_commerce.dto.request.ReadFavoritesRequest;
 import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
+import com.rustam.e_commerce.dto.response.DeleteFavoritesResponse;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
 import com.rustam.e_commerce.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,10 @@ public class FavoriteController {
     @GetMapping(path = "/read-favorites")
     public ResponseEntity<List<ReadFavoritesResponse>> readFavorites(@RequestBody ReadFavoritesRequest readFavoritesRequest){
         return new ResponseEntity<>(favoriteService.readFavorites(readFavoritesRequest),HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/delete-favorites/{id}")
+    public ResponseEntity<DeleteFavoritesResponse> deleteFavorites(@PathVariable Long id){
+        return new ResponseEntity<>(favoriteService.deleteFavorites(id),HttpStatus.OK);
     }
 }

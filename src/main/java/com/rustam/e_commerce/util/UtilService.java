@@ -2,6 +2,7 @@ package com.rustam.e_commerce.util;
 
 import com.rustam.e_commerce.dao.entity.Cart;
 import com.rustam.e_commerce.dao.entity.Category;
+import com.rustam.e_commerce.dao.entity.Favorite;
 import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.entity.user.Admin;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
@@ -38,6 +39,7 @@ public class UtilService {
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
     CartRepository cartRepository;
+    FavoriteRepository favoriteRepository;
     RedisTemplate<String,String> redisTemplate;
 
     public BaseUser findByUsername(String username) {
@@ -166,5 +168,10 @@ public class UtilService {
 
     public boolean findByUsernameExists(String username){
         return baseUserRepository.findByUsername(username).isPresent();
+    }
+
+    public Favorite findByFavoriteId(Long id) {
+        return favoriteRepository.findById(id)
+                .orElseThrow(() -> new FavoriteNotFoundException("No such favorite found."));
     }
 }
