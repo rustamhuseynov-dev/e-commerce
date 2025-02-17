@@ -8,6 +8,7 @@ import com.rustam.e_commerce.dto.request.AddToFavoriteRequest;
 import com.rustam.e_commerce.dto.request.ReadFavoritesRequest;
 import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
+import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
 import com.rustam.e_commerce.mapper.FavoriteMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,12 @@ public class FavoriteService {
     }
 
     public List<ReadFavoritesResponse> readFavorites(ReadFavoritesRequest readFavoritesRequest) {
+        utilService.findById(UUID.fromString(readFavoritesRequest.getUserId()));
         List<Favorite> userFavorites = favoriteRepository.findAllByUserId(readFavoritesRequest.getUserId());
+        boolean anyMatch = userFavorites.stream().anyMatch(fav -> !fav.getUserId().equals(readFavoritesRequest.getUserId()));
+        if (anyMatch){
+            throw new NoAuthotiryException("This favorites table does not belong to you.");
+        }
         return favoriteMapper.toDtos(userFavorites);
     }
 }
