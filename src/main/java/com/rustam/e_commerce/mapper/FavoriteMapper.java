@@ -2,6 +2,8 @@ package com.rustam.e_commerce.mapper;
 
 import com.rustam.e_commerce.dao.entity.Favorite;
 import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
+import com.rustam.e_commerce.dto.response.DeleteFavoritesResponse;
+import com.rustam.e_commerce.dto.response.DeletedFavorite;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -20,4 +22,6 @@ public interface FavoriteMapper {
     AddToFavoriteResponse toDto(Favorite favorite);
 
     List<ReadFavoritesResponse> toDtos(List<Favorite> userFavorites);
+
+    DeletedFavorite toDeleteDto(Favorite favorite);
 }
