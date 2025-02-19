@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReadFavoritesResponse {
+    private Long id;
     private String productName;
     private Integer quantity;
     private String description;
