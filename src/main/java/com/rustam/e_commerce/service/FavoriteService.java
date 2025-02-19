@@ -10,6 +10,7 @@ import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
 import com.rustam.e_commerce.dto.response.DeleteFavoritesResponse;
 import com.rustam.e_commerce.dto.response.DeletedFavorite;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
+import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
 import com.rustam.e_commerce.mapper.FavoriteMapper;
 import com.rustam.e_commerce.util.UtilService;
@@ -19,6 +20,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,6 +35,11 @@ public class FavoriteService {
         String userId = utilService.getCurrentUsername();
         Product product = utilService.findByProductId(addToFavoriteRequest.getProductId());
         Category category = utilService.findByCategoryId(product.getCategoryId());
+        Optional<Favorite> existingFavorite = favoriteRepository.findByProductId(addToFavoriteRequest.getProductId());
+
+        if (existingFavorite.isPresent()) {
+            throw new ExistsException("This product has already been added to favorites!");
+        }
         Favorite favorite = Favorite.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
@@ -46,6 +53,8 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
         return favoriteMapper.toDto(favorite);
     }
+
+
 
     public List<ReadFavoritesResponse> readFavorites(ReadFavoritesRequest readFavoritesRequest) {
         utilService.findById(UUID.fromString(readFavoritesRequest.getUserId()));
