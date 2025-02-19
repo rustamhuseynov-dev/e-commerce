@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +77,18 @@ public class FavoriteService {
                 .message("removed from favorites")
                 .deletedFavorite(deleteDto)
                 .build();
+    }
+
+    public String deleteAllFavorites() {
+        String userId = utilService.getCurrentUsername();
+        List<Favorite> allFavorites = favoriteRepository.findAllByUserId(userId);
+        boolean hasInvalidFavorites = allFavorites.stream()
+                .anyMatch(fav -> !fav.getUserId().equals(userId));
+
+        if (hasInvalidFavorites) {
+            throw new NoAuthotiryException("You are not allowed to delete others' favorites!");
+        }
+        favoriteRepository.deleteAll(allFavorites);
+        return "All favorites have been removed from the list";
     }
 }
