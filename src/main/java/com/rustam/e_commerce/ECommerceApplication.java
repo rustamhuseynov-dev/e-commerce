@@ -26,7 +26,8 @@ public class ECommerceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if (baseUserRepository.findByEmail("admin@example.com").isEmpty()) {
+		boolean existsBaseUserByEmail = baseUserRepository.existsBaseUserByEmail("admin@example.com");
+		if (!existsBaseUserByEmail) {
 			Admin admin = Admin.builder()
 					.id(UUID.randomUUID())
 					.name("Admin")
@@ -38,7 +39,6 @@ public class ECommerceApplication implements CommandLineRunner {
 					.enabled(true)
 					.authorities(Set.of(Role.ADMIN))
 					.build();
-
 			baseUserRepository.save(admin);
 			System.out.println("Default admin created: admin@example.com / admin123");
 		}
