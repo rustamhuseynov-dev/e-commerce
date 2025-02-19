@@ -34,4 +34,9 @@ public class FavoriteController {
     public ResponseEntity<DeleteFavoritesResponse> deleteFavorites(@PathVariable Long id){
         return new ResponseEntity<>(favoriteService.deleteFavorites(id),HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/delete-all-favorites")
+    public ResponseEntity<String> deleteAllFavorites(){
+        return new ResponseEntity<>(favoriteService.deleteAllFavorites(),HttpStatus.OK);
+    }
 }
