@@ -3,14 +3,17 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.*;
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.ShipmentTracking;
 import com.rustam.e_commerce.dao.repository.CartItemRepository;
 import com.rustam.e_commerce.dao.repository.CartRepository;
 import com.rustam.e_commerce.dao.repository.OrderRepository;
 import com.rustam.e_commerce.dto.OrderItemDTO;
 import com.rustam.e_commerce.dto.request.OrderCreateRequest;
+import com.rustam.e_commerce.dto.request.TrackOrderRequest;
 import com.rustam.e_commerce.dto.response.CreatePaymentResponse;
 import com.rustam.e_commerce.dto.response.OrderCreateResponse;
 import com.rustam.e_commerce.dto.response.OrderReadResponse;
+import com.rustam.e_commerce.dto.response.TrackOrderResponse;
 import com.rustam.e_commerce.mapper.OrderMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +42,7 @@ public class OrderService {
     ModelMapper modelMapper;
     OrderItemService orderItemService;
     EmailSendService emailSendService;
+    ShipmentTrackingService shipmentTrackingService;
 
     @Transactional
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
@@ -53,14 +58,14 @@ public class OrderService {
 
         Payment payment = paymentService.createPayment(order, orderCreateRequest.getPaymentMethod());
         order.setPayment(payment);
-        orderRepository.save(order);
+        Order save = orderRepository.save(order);
 
         List<OrderItem> orderItems = cart.getCartItems().stream()
                 .map(cartItem -> createOrderItem(order, cartItem))
                 .toList();
 
         orderItemService.save(orderItems);
-
+        createTrackingOrder(save,cart);
         cart.getCartItems().forEach(item -> {
             Product product = utilService.findByProductId(item.getProduct().getProductId());
             utilService.updateProductQuantity(item.getQuantity(),product);
@@ -76,6 +81,17 @@ public class OrderService {
         orderCreateResponse.setOrderStatus(OrderStatus.SUCCESSFUL);
         orderCreateResponse.setEmail(user.getEmail());
         return orderCreateResponse;
+    }
+
+    private void createTrackingOrder(Order order, Cart cart) {
+        ShipmentTracking shipmentTracking = ShipmentTracking.builder()
+                .orderId(order.getOrderId())
+                .trackingNumber(order.getTrackingNumber())
+                .status(OrderStatus.PENDING)
+                .location(order.getShippingAddress())
+                .updatedAt(LocalDateTime.now())
+                .build();
+        shipmentTrackingService.save(shipmentTracking);
     }
 
     private OrderItem createOrderItem(Order order, CartItem cartItem) {
@@ -106,5 +122,4 @@ public class OrderService {
                         .build())
                 .collect(Collectors.toList());
     }
-
 }

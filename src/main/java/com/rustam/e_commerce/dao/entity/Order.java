@@ -44,6 +44,8 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDate orderDate;
+    private String shippingAddress;
+    private String trackingNumber;
 
     @OneToOne
     @JoinColumn(name = "payment_id")

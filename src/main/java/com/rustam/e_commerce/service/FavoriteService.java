@@ -10,6 +10,7 @@ import com.rustam.e_commerce.dto.response.AddToFavoriteResponse;
 import com.rustam.e_commerce.dto.response.DeleteFavoritesResponse;
 import com.rustam.e_commerce.dto.response.DeletedFavorite;
 import com.rustam.e_commerce.dto.response.ReadFavoritesResponse;
+import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.exception.custom.NoAuthotiryException;
 import com.rustam.e_commerce.mapper.FavoriteMapper;
 import com.rustam.e_commerce.util.UtilService;
@@ -19,7 +20,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,11 @@ public class FavoriteService {
         String userId = utilService.getCurrentUsername();
         Product product = utilService.findByProductId(addToFavoriteRequest.getProductId());
         Category category = utilService.findByCategoryId(product.getCategoryId());
+        Optional<Favorite> existingFavorite = favoriteRepository.findByProductId(addToFavoriteRequest.getProductId());
+
+        if (existingFavorite.isPresent()) {
+            throw new ExistsException("This product has already been added to favorites!");
+        }
         Favorite favorite = Favorite.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
@@ -46,6 +54,8 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
         return favoriteMapper.toDto(favorite);
     }
+
+
 
     public List<ReadFavoritesResponse> readFavorites(ReadFavoritesRequest readFavoritesRequest) {
         utilService.findById(UUID.fromString(readFavoritesRequest.getUserId()));
@@ -67,5 +77,18 @@ public class FavoriteService {
                 .message("removed from favorites")
                 .deletedFavorite(deleteDto)
                 .build();
+    }
+
+    public String deleteAllFavorites() {
+        String userId = utilService.getCurrentUsername();
+        List<Favorite> allFavorites = favoriteRepository.findAllByUserId(userId);
+        boolean hasInvalidFavorites = allFavorites.stream()
+                .anyMatch(fav -> !fav.getUserId().equals(userId));
+
+        if (hasInvalidFavorites) {
+            throw new NoAuthotiryException("You are not allowed to delete others' favorites!");
+        }
+        favoriteRepository.deleteAll(allFavorites);
+        return "All favorites have been removed from the list";
     }
 }
