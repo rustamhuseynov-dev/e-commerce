@@ -65,7 +65,7 @@ public class OrderService {
                 .toList();
 
         orderItemService.save(orderItems);
-        createTrackingOrder(save,cart);
+        createTrackingOrder(save);
         cart.getCartItems().forEach(item -> {
             Product product = utilService.findByProductId(item.getProduct().getProductId());
             utilService.updateProductQuantity(item.getQuantity(),product);
@@ -83,7 +83,7 @@ public class OrderService {
         return orderCreateResponse;
     }
 
-    private void createTrackingOrder(Order order, Cart cart) {
+    private void createTrackingOrder(Order order) {
         ShipmentTracking shipmentTracking = ShipmentTracking.builder()
                 .orderId(order.getOrderId())
                 .trackingNumber(order.getTrackingNumber())
