@@ -17,4 +17,5 @@ public class OrderCreateRequest {
     private String userId;
     private Long productId;
     private String paymentMethod;
+    private String shippingAddress;
 }
