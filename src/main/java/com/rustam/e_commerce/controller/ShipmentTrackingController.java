@@ -19,8 +19,8 @@ public class ShipmentTrackingController {
 
     private final ShipmentTrackingService shipmentTrackingService;
 
-//    @GetMapping(path = "/track-order")
-//    public ResponseEntity<TrackOrderResponse> trackOrder(@RequestBody TrackOrderRequest trackOrderRequest){
-//        return new ResponseEntity<>(shipmentTrackingService.trackOrder(trackOrderRequest), HttpStatus.ACCEPTED);
-//    }
+    @GetMapping(path = "/track-order")
+    public ResponseEntity<TrackOrderResponse> trackOrder(@RequestBody TrackOrderRequest trackOrderRequest){
+        return new ResponseEntity<>(shipmentTrackingService.trackOrder(trackOrderRequest), HttpStatus.ACCEPTED);
+    }
 }
