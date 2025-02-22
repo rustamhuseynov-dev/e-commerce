@@ -1,8 +1,6 @@
 package com.rustam.e_commerce.dto.response;
 
 import com.rustam.e_commerce.dao.entity.enums.OrderStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
