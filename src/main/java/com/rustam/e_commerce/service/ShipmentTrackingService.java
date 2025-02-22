@@ -22,7 +22,7 @@ public class ShipmentTrackingService {
     public TrackOrderResponse trackOrder(TrackOrderRequest trackOrderRequest) {
         ShipmentTracking byTrackingNumber = shipmentTrackingRepository.findByTrackingNumber(trackOrderRequest.getTrackingNumber())
                 .orElseThrow(() -> new ShipmentTrackingNotFoundException("No tracking for such a shipment was found."));
-        return shipmentTrackingMapper.toDto(byTrackingNumber);
+        return shipmentTrackingMapper.toResponse(byTrackingNumber);
     }
 
     public void save(ShipmentTracking shipmentTracking) {
