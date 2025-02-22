@@ -30,6 +30,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ShipmentTrackingNotFoundException.class)
+    public ResponseEntity<ExceptionResponseMessages> shipmentTrackingNotFoundException(ShipmentTrackingNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
     @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<ExceptionResponseMessages> handleIncorrectPasswordException(IncorrectPasswordException ex) {
         return new ResponseEntity<>(
