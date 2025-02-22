@@ -15,5 +15,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 )
 public interface ShipmentTrackingMapper {
 
-    TrackOrderResponse toDto(ShipmentTracking byTrackingNumber);
+    TrackOrderResponse toResponse(ShipmentTracking byTrackingNumber);
 }
