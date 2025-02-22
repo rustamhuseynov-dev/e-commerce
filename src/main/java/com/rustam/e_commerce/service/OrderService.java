@@ -48,12 +48,15 @@ public class OrderService {
     public OrderCreateResponse create(OrderCreateRequest orderCreateRequest) {
         BaseUser user = utilService.findById(UUID.fromString(orderCreateRequest.getUserId()));
         Cart cart = utilService.findByCartIdAndUserId(orderCreateRequest.getCartId(), orderCreateRequest.getUserId());
+        String trackingNumber = utilService.generateTrackingNumber();
         Order order = Order.builder()
                 .orderDate(LocalDate.now())
                 .orderStatus(OrderStatus.SUCCESSFUL)
                 .totalAmount(cart.getTotalPrice())
                 .userId(orderCreateRequest.getUserId())
                 .email(user.getEmail())
+                .trackingNumber(trackingNumber)
+                .shippingAddress(orderCreateRequest.getShippingAddress())
                 .build();
 
         Payment payment = paymentService.createPayment(order, orderCreateRequest.getPaymentMethod());
@@ -75,11 +78,8 @@ public class OrderService {
         OrderCreateResponse orderCreateResponse = modelMapper.map(order, OrderCreateResponse.class);
         orderCreateResponse.setOrderItems(new ArrayList<>());
         orderItems.forEach(item -> orderCreateResponse.getOrderItems().add(modelMapper.map(item, OrderItem.class)));
-        orderCreateResponse.setOrderDate(order.getOrderDate());
         orderCreateResponse.setTotalAmount(order.getTotalAmount());
         orderCreateResponse.setPayment(payment);
-        orderCreateResponse.setOrderStatus(OrderStatus.SUCCESSFUL);
-        orderCreateResponse.setEmail(user.getEmail());
         return orderCreateResponse;
     }
 
