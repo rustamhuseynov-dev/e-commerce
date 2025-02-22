@@ -174,4 +174,8 @@ public class UtilService {
         return favoriteRepository.findById(id)
                 .orElseThrow(() -> new FavoriteNotFoundException("No such favorite found."));
     }
+
+    public String generateTrackingNumber() {
+        return "AWG-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
+    }
 }

@@ -15,7 +15,6 @@ import java.util.UUID;
 public class OrderCreateRequest {
     private Long cartId;
     private String userId;
-    private Long productId;
     private String paymentMethod;
     private String shippingAddress;
 }
