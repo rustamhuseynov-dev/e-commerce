@@ -102,7 +102,6 @@ public class UserService {
         String currentUsername = utilService.getCurrentUsername();
         BaseUser user = utilService.findById(emailAndPasswordUpdateRequest.getUserId());
         utilService.validation(currentUsername,user.getId());
-        utilService.validation(currentUsername, user.getId());
         boolean exists = utilService.findAllByUser().stream()
                 .map(User::getEmail)
                 .anyMatch(existingUsername -> existingUsername.equals(emailAndPasswordUpdateRequest.getEmail()));
