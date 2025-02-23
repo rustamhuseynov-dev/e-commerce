@@ -165,8 +165,8 @@ public class GlobalExceptionHandler {
         System.out.println("For unhandled exceptions");
         System.out.println(ex.getClass());
         return new ResponseEntity<>(
-                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR) ,
-                HttpStatus.INTERNAL_SERVER_ERROR
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.METHOD_NOT_ALLOWED),
+                HttpStatus.METHOD_NOT_ALLOWED
         );
     }
 }
