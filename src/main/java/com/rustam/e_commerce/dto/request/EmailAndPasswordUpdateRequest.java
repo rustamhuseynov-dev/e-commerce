@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class EmailAndPasswordUpdateRequest {
 
-    @NotNull(message = "The user id column cannot be empty.")
+    @NotBlank(message = "The user id column cannot be empty.")
     private UUID userId;
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Enter a valid email address.")
     @NotNull
