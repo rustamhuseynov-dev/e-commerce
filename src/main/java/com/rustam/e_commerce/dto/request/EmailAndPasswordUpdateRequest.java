@@ -23,3 +23,4 @@ public class EmailAndPasswordUpdateRequest {
     private String email;
     private String password;
 }
+
