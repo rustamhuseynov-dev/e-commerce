@@ -45,7 +45,7 @@ public class CategoryService {
                 .categoryName(updateCategoryRequest.getCategoryName()).build();
     }
 
-    public List<ReadCategoryResponse> read(ReadCategoryRequest readCategoryRequest) {
+    public List<ReadCategoryResponse> read() {
         List<Category> categories = categoryRepository.findAll();
         return categoryMapper.toRead(categories);
     }
