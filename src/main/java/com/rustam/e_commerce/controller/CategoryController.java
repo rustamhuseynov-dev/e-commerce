@@ -29,8 +29,8 @@ public class CategoryController {
     }
 
     @GetMapping(path = "/read-category")
-    public ResponseEntity<List<ReadCategoryResponse>> read(@RequestBody ReadCategoryRequest readCategoryRequest){
-        return new ResponseEntity<>(categoryService.read(readCategoryRequest),HttpStatus.OK);
+    public ResponseEntity<List<ReadCategoryResponse>> read(){
+        return new ResponseEntity<>(categoryService.read(),HttpStatus.OK);
     }
 
     @PutMapping(path = "/update-category")
