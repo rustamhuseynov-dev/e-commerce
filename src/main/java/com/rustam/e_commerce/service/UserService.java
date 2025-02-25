@@ -69,7 +69,7 @@ public class UserService {
 
     public UserUpdateResponse update(UserUpdateRequest userUpdateRequest) {
         String currentUsername = utilService.getCurrentUsername();
-        BaseUser user = utilService.findById(userUpdateRequest.getId());
+        User user = (User) utilService.findById(UUID.fromString(currentUsername));
         utilService.validation(currentUsername, user.getId());
         boolean exists = utilService.findAllByUser().stream()
                 .map(User::getUsername)
@@ -77,7 +77,18 @@ public class UserService {
         if (exists) {
             throw new ExistsException("This username is already taken.");
         }
-        modelMapper.map(userUpdateRequest, user);
+        if (!userUpdateRequest.getName().isBlank()){
+            user.setName(userUpdateRequest.getName());
+        }
+        if (!userUpdateRequest.getSurname().isBlank()){
+            user.setSurname(userUpdateRequest.getSurname());
+        }
+        if (!userUpdateRequest.getUsername().isBlank()){
+            user.setUsername(userUpdateRequest.getUsername());
+        }
+        if (!userUpdateRequest.getPhone().isBlank()){
+            user.setPhone(userUpdateRequest.getPhone());
+        }
         UserUpdateResponse.builder().text("This user has been updated by you.").build();
         baseUserRepository.save(user);
         return userMapper.toUpdated(user);
@@ -102,7 +113,6 @@ public class UserService {
         String currentUsername = utilService.getCurrentUsername();
         BaseUser user = utilService.findById(emailAndPasswordUpdateRequest.getUserId());
         utilService.validation(currentUsername,user.getId());
-        utilService.validation(currentUsername, user.getId());
         boolean exists = utilService.findAllByUser().stream()
                 .map(User::getEmail)
                 .anyMatch(existingUsername -> existingUsername.equals(emailAndPasswordUpdateRequest.getEmail()));
