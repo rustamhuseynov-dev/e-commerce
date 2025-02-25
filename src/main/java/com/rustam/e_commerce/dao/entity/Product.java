@@ -41,6 +41,8 @@ public class Product {
     private double discount;
     private double specialPrice;
     private String userId;
+    private String imageUrl;
+    private String videoUrl;
 
     @JoinColumn(name = "category_id")
     private Long categoryId;
