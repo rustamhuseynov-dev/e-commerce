@@ -77,21 +77,20 @@ public class UserService {
         if (exists) {
             throw new ExistsException("This username is already taken.");
         }
-        if (!userUpdateRequest.getName().isBlank()){
+        if (userUpdateRequest.getName() != null && !userUpdateRequest.getName().isBlank()) {
             user.setName(userUpdateRequest.getName());
         }
-        if (!userUpdateRequest.getSurname().isBlank()){
+        if (userUpdateRequest.getSurname() != null && !userUpdateRequest.getSurname().isBlank()) {
             user.setSurname(userUpdateRequest.getSurname());
         }
-        if (!userUpdateRequest.getUsername().isBlank()){
+        if (userUpdateRequest.getUsername() != null && !userUpdateRequest.getUsername().isBlank()) {
             user.setUsername(userUpdateRequest.getUsername());
         }
-        if (!userUpdateRequest.getPhone().isBlank()){
+        if (userUpdateRequest.getPhone() != null && !userUpdateRequest.getPhone().isBlank()) {
             user.setPhone(userUpdateRequest.getPhone());
         }
-        UserUpdateResponse.builder().text("This user has been updated by you.").build();
         baseUserRepository.save(user);
-        return userMapper.toUpdated(user);
+        return userMapper.toUpdatedResponse(user);
     }
 
     public UserDeletedResponse delete(UUID id) {
