@@ -102,6 +102,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+//    @ExceptionHandler(NullPointerException.class)
+//    public ResponseEntity<ExceptionResponseMessages> nullPointerException(NullPointerException ex) {
+//        return new ResponseEntity<>(
+//                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+//                HttpStatus.NOT_FOUND
+//        );
+//    }
+
     @ExceptionHandler(CartNotFoundException.class)
     public ResponseEntity<ExceptionResponseMessages> cartNotFoundException(CartNotFoundException ex) {
         return new ResponseEntity<>(
