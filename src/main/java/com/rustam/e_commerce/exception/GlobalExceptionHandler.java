@@ -30,6 +30,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ExistsException.class)
+    public ResponseEntity<ExceptionResponseMessages> existsException(ExistsException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.CONFLICT) ,
+                HttpStatus.CONFLICT
+        );
+    }
+
     @ExceptionHandler(ShipmentTrackingNotFoundException.class)
     public ResponseEntity<ExceptionResponseMessages> shipmentTrackingNotFoundException(ShipmentTrackingNotFoundException ex) {
         return new ResponseEntity<>(
@@ -93,6 +101,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
+
+//    @ExceptionHandler(NullPointerException.class)
+//    public ResponseEntity<ExceptionResponseMessages> nullPointerException(NullPointerException ex) {
+//        return new ResponseEntity<>(
+//                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
+//                HttpStatus.NOT_FOUND
+//        );
+//    }
 
     @ExceptionHandler(CartNotFoundException.class)
     public ResponseEntity<ExceptionResponseMessages> cartNotFoundException(CartNotFoundException ex) {
