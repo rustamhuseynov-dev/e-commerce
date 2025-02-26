@@ -9,6 +9,7 @@ import com.rustam.e_commerce.dto.response.DeleteCategoryResponse;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
 import com.rustam.e_commerce.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping(path = "/create-category")
-    public ResponseEntity<CreateCategoryResponse> create(@RequestBody CreateCategoryRequest createCategoryRequest){
+    public ResponseEntity<CreateCategoryResponse> create(@Valid @RequestBody CreateCategoryRequest createCategoryRequest){
         return new ResponseEntity<>(categoryService.create(createCategoryRequest), HttpStatus.CREATED);
     }
 
@@ -39,12 +40,12 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/update-category")
-    public ResponseEntity<UpdateCategoryResponse> update(@RequestBody UpdateCategoryRequest updateCategoryRequest){
+    public ResponseEntity<UpdateCategoryResponse> update(@Valid @RequestBody UpdateCategoryRequest updateCategoryRequest){
         return new ResponseEntity<>(categoryService.update(updateCategoryRequest),HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/delete-category")
-    public ResponseEntity<DeleteCategoryResponse> delete(@RequestBody DeleteCategoryRequest deleteCategoryRequest){
+    public ResponseEntity<DeleteCategoryResponse> delete(@Valid @RequestBody DeleteCategoryRequest deleteCategoryRequest){
         return new ResponseEntity<>(categoryService.delete(deleteCategoryRequest),HttpStatus.OK);
     }
 }
