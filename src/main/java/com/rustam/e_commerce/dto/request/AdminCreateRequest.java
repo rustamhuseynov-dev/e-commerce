@@ -15,8 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class AdminCreateRequest {
-    @NotNull(message = "The id column cannot be empty.")
-    private UUID id;
     private String username;
     private String email;
     private String password;
