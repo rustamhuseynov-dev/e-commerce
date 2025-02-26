@@ -20,8 +20,8 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping(path = "/request-admin")
-    public ResponseEntity<ForAdminResponse> requestAdmin(@RequestBody ForAdminRequest forAdminRequest){
-        return new ResponseEntity<>(adminService.adminRequest(forAdminRequest),HttpStatus.OK);
+    public ResponseEntity<ForAdminResponse> requestAdmin(){
+        return new ResponseEntity<>(adminService.adminRequest(),HttpStatus.OK);
     }
 
     @PostMapping(path = "/create")
@@ -29,9 +29,9 @@ public class AdminController {
         return new ResponseEntity<>(adminService.create(adminCreateRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/read-by-id/{id}")
-    public ResponseEntity<AdminResponse> readById(@PathVariable UUID id){
-        return new ResponseEntity<>(adminService.readById(id),HttpStatus.ACCEPTED);
+    @GetMapping(path = "/read-by-id")
+    public ResponseEntity<AdminResponse> readById(){
+        return new ResponseEntity<>(adminService.readById(),HttpStatus.ACCEPTED);
     }
 
     @PutMapping(path = "/update")
@@ -39,8 +39,8 @@ public class AdminController {
         return new ResponseEntity<>(adminService.update(adminUpdateRequest),HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<AdminDeleteResponse> delete(@PathVariable UUID id){
-        return new ResponseEntity<>(adminService.delete(id),HttpStatus.OK);
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<AdminDeleteResponse> delete(){
+        return new ResponseEntity<>(adminService.delete(),HttpStatus.OK);
     }
 }
