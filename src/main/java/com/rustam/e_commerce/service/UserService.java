@@ -111,7 +111,7 @@ public class UserService {
 
     public EmailAndPasswordUpdateResponse updateEmailAndPassword(EmailAndPasswordUpdateRequest emailAndPasswordUpdateRequest) {
         String currentUsername = utilService.getCurrentUsername();
-        BaseUser user = utilService.findById(UUID.fromString(emailAndPasswordUpdateRequest.getUserId()));
+        BaseUser user = utilService.findById(emailAndPasswordUpdateRequest.getUserId());
         utilService.validation(currentUsername,user.getId());
         boolean exists = utilService.findAllByUser().stream()
                 .map(User::getEmail)
