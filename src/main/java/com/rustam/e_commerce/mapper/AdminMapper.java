@@ -19,7 +19,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface AdminMapper {
     AdminCreateResponse toResponse(Admin admin);
 
-    AdminResponse toRead(BaseUser user);
-
     AdminUpdateResponse toUpdated(BaseUser user);
+
+    AdminResponse toDto(Admin user);
 }
