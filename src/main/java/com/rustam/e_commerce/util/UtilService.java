@@ -178,4 +178,9 @@ public class UtilService {
     public String generateTrackingNumber() {
         return "AWG-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
     }
+
+    public Admin findByAdmin(UUID id) {
+        return baseUserRepository.findByAdminId(id)
+                .orElseThrow(() -> new UserNotFoundException("No such admin found."));
+    }
 }

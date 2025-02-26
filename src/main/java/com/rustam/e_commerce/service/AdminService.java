@@ -14,6 +14,7 @@ import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@Slf4j
 public class AdminService {
 
     BaseUserRepository baseUserRepository;
@@ -69,8 +71,8 @@ public class AdminService {
     }
 
     public AdminResponse readById(UUID id) {
-        BaseUser user = utilService.findById(id);
-        return adminMapper.toRead(user);
+        Admin user = utilService.findByAdmin(id);
+        return adminMapper.toDto(user);
     }
 
     public AdminUpdateResponse update(AdminUpdateRequest adminUpdateRequest) {
