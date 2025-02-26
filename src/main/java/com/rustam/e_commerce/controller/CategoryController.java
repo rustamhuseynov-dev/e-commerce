@@ -33,6 +33,11 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.read(),HttpStatus.OK);
     }
 
+    @GetMapping(path = "/read-category/{name}")
+    public ResponseEntity<ReadCategoryResponse> readByName(@PathVariable String name){
+        return new ResponseEntity<>(categoryService.readByName(name),HttpStatus.OK);
+    }
+
     @PutMapping(path = "/update-category")
     public ResponseEntity<UpdateCategoryResponse> update(@RequestBody UpdateCategoryRequest updateCategoryRequest){
         return new ResponseEntity<>(categoryService.update(updateCategoryRequest),HttpStatus.OK);
