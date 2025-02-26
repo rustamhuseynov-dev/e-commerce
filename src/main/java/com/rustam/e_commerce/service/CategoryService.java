@@ -10,6 +10,7 @@ import com.rustam.e_commerce.dto.response.CreateCategoryResponse;
 import com.rustam.e_commerce.dto.response.DeleteCategoryResponse;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import com.rustam.e_commerce.dto.response.UpdateCategoryResponse;
+import com.rustam.e_commerce.exception.custom.ExistsException;
 import com.rustam.e_commerce.mapper.CategoryMapper;
 import com.rustam.e_commerce.util.UtilService;
 import lombok.AccessLevel;
@@ -32,6 +33,10 @@ public class CategoryService {
         Category category = Category.builder()
                 .categoryName(createCategoryRequest.getCategoryName())
                 .build();
+        Boolean existsByCategoryName = categoryRepository.existsByCategoryName(createCategoryRequest.getCategoryName());
+        if (existsByCategoryName){
+            throw new ExistsException("This category is available");
+        }
         categoryRepository.save(category);
         return CreateCategoryResponse.builder().categoryName(createCategoryRequest.getCategoryName()).build();
     }
