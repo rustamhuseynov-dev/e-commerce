@@ -34,12 +34,13 @@ public class AdminService {
     AdminMapper adminMapper;
     ModelMapper modelMapper;
 
-    public ForAdminResponse adminRequest(ForAdminRequest forAdminRequest) {
-        BaseUser user = utilService.findById(forAdminRequest.getId());
+    public ForAdminResponse adminRequest() {
+        String id = utilService.getCurrentUsername();
+        BaseUser user = utilService.findById(UUID.fromString(id));
         user.setAuthorities(Collections.singleton(Role.REQUEST_ADMIN));
         baseUserRepository.save(user);
         return ForAdminResponse.builder()
-                .id(forAdminRequest.getId())
+                .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getAuthorities())
@@ -47,7 +48,8 @@ public class AdminService {
     }
 
     public AdminCreateResponse create(AdminCreateRequest adminCreateRequest) {
-        BaseUser user = utilService.findById(adminCreateRequest.getId());
+        String id = utilService.getCurrentUsername();
+        BaseUser user = utilService.findById(UUID.fromString(id));
         Admin admin = Admin.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
@@ -70,31 +72,43 @@ public class AdminService {
         return adminMapper.toResponse(admin);
     }
 
-    public AdminResponse readById(UUID id) {
-        Admin user = utilService.findByAdmin(id);
+    public AdminResponse readById() {
+        String id = utilService.getCurrentUsername();
+        Admin user = utilService.findByAdmin(UUID.fromString(id));
         return adminMapper.toDto(user);
     }
 
     public AdminUpdateResponse update(AdminUpdateRequest adminUpdateRequest) {
-        String currentUsername = utilService.getCurrentUsername();
-        BaseUser user = utilService.findById(adminUpdateRequest.getId());
-        utilService.validation(currentUsername, user.getId());
+        String userId = utilService.getCurrentUsername();
+        Admin user = (Admin) utilService.findById(UUID.fromString(userId));
+        utilService.validation(userId, user.getId());
         boolean exists = utilService.findAllByAdmin().stream()
                 .map(Admin::getUsername)
                 .anyMatch(existingUsername -> existingUsername.equals(adminUpdateRequest.getUsername()));
         if (exists) {
             throw new ExistsException("This username is already taken.");
         }
+        if (adminUpdateRequest.getName() != null && !adminUpdateRequest.getName().isBlank()) {
+            user.setName(adminUpdateRequest.getName());
+        }
+        if (adminUpdateRequest.getSurname() != null && !adminUpdateRequest.getSurname().isBlank()) {
+            user.setSurname(adminUpdateRequest.getSurname());
+        }
+        if (adminUpdateRequest.getUsername() != null && !adminUpdateRequest.getUsername().isBlank()) {
+            user.setUsername(adminUpdateRequest.getUsername());
+        }
+        if (adminUpdateRequest.getPhone() != null && !adminUpdateRequest.getPhone().isBlank()) {
+            user.setPhone(adminUpdateRequest.getPhone());
+        }
         modelMapper.map(adminUpdateRequest, user);
-        UserUpdateResponse.builder().text("This user has been updated by you.").build();
         baseUserRepository.save(user);
         return adminMapper.toUpdated(user);
     }
 
-    public AdminDeleteResponse delete(UUID id) {
-        BaseUser baseUser = utilService.findById(id);
-        String currentUsername = utilService.getCurrentUsername();
-        utilService.validation(baseUser.getId(), currentUsername);
+    public AdminDeleteResponse delete() {
+        String id = utilService.getCurrentUsername();
+        BaseUser baseUser = utilService.findById(UUID.fromString(id));
+        utilService.validation(baseUser.getId(), id);
         AdminDeleteResponse deletedResponse = new AdminDeleteResponse();
         modelMapper.map(baseUser, deletedResponse);
         deletedResponse.setText("This user was deleted by you.");
