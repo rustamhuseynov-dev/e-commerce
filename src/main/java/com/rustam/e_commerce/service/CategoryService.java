@@ -73,6 +73,9 @@ public class CategoryService {
     }
 
     public ReadCategoryResponse readByName(String name) {
+        if (name.isEmpty()){
+            throw new NullPointerException();
+        }
         String userId = utilService.getCurrentUsername();
         Category category = categoryRepository.findByCategoryName(name)
                 .orElseThrow(() -> new CategoryNotFoundException("No such category found."));
