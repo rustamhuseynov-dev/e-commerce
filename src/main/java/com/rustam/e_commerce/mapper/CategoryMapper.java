@@ -17,4 +17,6 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 )
 public interface CategoryMapper {
     List<ReadCategoryResponse> toRead(List<Category> categories);
+
+    ReadCategoryResponse toDto(Category category);
 }
