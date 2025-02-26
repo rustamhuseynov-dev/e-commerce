@@ -69,7 +69,7 @@ public class AdminService {
     }
 
     public AdminResponse readById(UUID id) {
-        BaseUser user = utilService.findById(id);
+        BaseUser user = utilService.findByAdmin(id);
         return adminMapper.toRead(user);
     }
 
