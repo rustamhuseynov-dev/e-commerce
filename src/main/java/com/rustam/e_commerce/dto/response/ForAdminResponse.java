@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class ForAdminResponse {
-    private UUID id;
+    private String id;
     private String name;
     private String email;
     private Set<Role> role;
