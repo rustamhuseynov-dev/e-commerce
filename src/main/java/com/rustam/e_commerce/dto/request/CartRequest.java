@@ -12,7 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class CartRequest {
-
     private UUID userId;
     private Long productId;
     private Integer quantity;
