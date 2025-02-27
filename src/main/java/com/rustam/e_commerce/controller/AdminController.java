@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +30,11 @@ public class AdminController {
     @PostMapping(path = "/accepting-request-to-become-admin")
     public ResponseEntity<AcceptingRequestToBecomeAdminResponse> acceptingRequestToBecomeAdmin(@RequestBody AcceptingRequestToBecomeAdminRequest acceptingRequestToBecomeAdminRequest){
         return new ResponseEntity<>(adminService.acceptingRequestToBecomeAdmin(acceptingRequestToBecomeAdminRequest),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/applications-to-become-admin")
+    public ResponseEntity<List<ApplicationsToBecomeAdmin>> applicationsToBecomeAdmin(){
+        return new ResponseEntity<>(adminService.applicationsToBecomeAdmin(),HttpStatus.OK);
     }
 
     @PostMapping(path = "/create")
