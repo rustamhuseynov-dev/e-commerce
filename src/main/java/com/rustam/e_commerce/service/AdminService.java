@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -142,5 +143,10 @@ public class AdminService {
                 .role(Collections.singleton(Role.ADMIN))
                 .text("Congratulations, good luck in your new position.")
                 .build();
+    }
+
+    public List<ApplicationsToBecomeAdmin> applicationsToBecomeAdmin() {
+        List<User> users = baseUserRepository.findAllByRoleRequestAdmin(Role.REQUEST_ADMIN);
+        return adminMapper.toApplicationsToBecomeAdminResponses(users);
     }
 }
