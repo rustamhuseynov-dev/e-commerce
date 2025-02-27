@@ -28,4 +28,10 @@ public interface BaseUserRepository extends JpaRepository<BaseUser, UUID> {
 
     @Query(value = "SELECT * FROM base_users WHERE user_type = 'ADMIN' AND id = :id", nativeQuery = true)
     Optional<Admin> findByAdminId(UUID id);
+
+    @Query(value = "SELECT * FROM base_users u " +
+            "JOIN authorities a ON u.id = a.base_user_id " +
+            "WHERE u.user_type = 'USER' AND a.role = 'REQUEST_ADMIN' AND u.id = :userId",
+            nativeQuery = true)
+    Optional<User> findUserWithRoleAndType(UUID userId);
 }
