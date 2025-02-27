@@ -1,5 +1,6 @@
 package com.rustam.e_commerce.controller;
 
+import com.rustam.e_commerce.dto.request.AcceptingRequestToBecomeAdminRequest;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
 import com.rustam.e_commerce.dto.request.ForAdminRequest;
@@ -22,6 +23,11 @@ public class AdminController {
     @PostMapping(path = "/request-admin")
     public ResponseEntity<ForAdminResponse> requestAdmin(){
         return new ResponseEntity<>(adminService.adminRequest(),HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/accepting-request-to-become-admin")
+    public ResponseEntity<AcceptingRequestToBecomeAdminResponse> acceptingRequestToBecomeAdmin(@RequestBody AcceptingRequestToBecomeAdminRequest acceptingRequestToBecomeAdminRequest){
+        return new ResponseEntity<>(adminService.acceptingRequestToBecomeAdmin(acceptingRequestToBecomeAdminRequest),HttpStatus.ACCEPTED);
     }
 
     @PostMapping(path = "/create")
