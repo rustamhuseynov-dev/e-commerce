@@ -63,6 +63,7 @@ public class SecurityConfig {
     private String[] getUserRoleEndpoints() {
         return new String[]{
                 "/api/v1/auth/**",
+                "/api/v1/admin/request-admin",
                 "/api/v1/user/update-email-and-password",
                 "/api/v1/user/update",
                 "/api/v1/user/delete/{id}",
