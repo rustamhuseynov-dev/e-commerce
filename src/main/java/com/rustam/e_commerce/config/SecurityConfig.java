@@ -33,7 +33,6 @@ public class SecurityConfig {
                         x
                                 .requestMatchers(getPublicEndpoints()).permitAll()
                                 .requestMatchers(getUserRoleEndpoints()).hasAuthority(Role.USER.getValue())
-                                .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
                                 .requestMatchers(getAdminRoleEndpoints()).hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
