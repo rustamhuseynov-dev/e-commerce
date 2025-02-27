@@ -71,4 +71,8 @@ public class EmailSendService {
     public void sendEmailToChangePassword(ForgotYourPasswordRequest forgotYourPasswordRequest) {
         mailSenderUtil.sendEmail(forgotYourPasswordRequest.getEmail(),"AlWayGo","http://localhost:5555/api/v1/auth/reset-password");
     }
+
+    public void sendEmailToMessage(String email, String text) {
+        mailSenderUtil.sendEmail(email,"AlWayGo",text);
+    }
 }
