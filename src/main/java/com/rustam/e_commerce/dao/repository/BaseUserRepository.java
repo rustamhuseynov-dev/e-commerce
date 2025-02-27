@@ -1,5 +1,6 @@
 package com.rustam.e_commerce.dao.repository;
 
+import com.rustam.e_commerce.dao.entity.enums.Role;
 import com.rustam.e_commerce.dao.entity.user.Admin;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
 import com.rustam.e_commerce.dao.entity.user.User;
@@ -34,4 +35,7 @@ public interface BaseUserRepository extends JpaRepository<BaseUser, UUID> {
             "WHERE u.user_type = 'USER' AND a.role = 'REQUEST_ADMIN' AND u.id = :userId",
             nativeQuery = true)
     Optional<User> findUserWithRoleAndType(UUID userId);
+
+    @Query("SELECT u FROM BaseUser u JOIN u.authorities a WHERE a = :role")
+    List<User> findAllByRoleRequestAdmin(Role role);
 }
