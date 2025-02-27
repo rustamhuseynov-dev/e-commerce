@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/email-verification")
-    public ResponseEntity<EmailVerificationResponse> emailVerification(@RequestBody EmailVerificationRequest emailVerificationRequest){
+    public ResponseEntity<EmailVerificationResponse> emailVerification(@Valid @RequestBody EmailVerificationRequest emailVerificationRequest){
         return new ResponseEntity<>(authService.emailVerification(emailVerificationRequest),HttpStatus.ACCEPTED);
     }
 

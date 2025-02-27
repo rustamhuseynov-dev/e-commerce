@@ -33,7 +33,6 @@ public class SecurityConfig {
                         x
                                 .requestMatchers(getPublicEndpoints()).permitAll()
                                 .requestMatchers(getUserRoleEndpoints()).hasAuthority(Role.USER.getValue())
-                                .requestMatchers("/api/v1/admin/create").hasAuthority(Role.REQUEST_ADMIN.getValue())
                                 .requestMatchers(getAdminRoleEndpoints()).hasAuthority(Role.ADMIN.getValue())
                                 .anyRequest().authenticated()
                 )
@@ -63,6 +62,7 @@ public class SecurityConfig {
     private String[] getUserRoleEndpoints() {
         return new String[]{
                 "/api/v1/auth/**",
+                "/api/v1/admin/request-admin",
                 "/api/v1/user/update-email-and-password",
                 "/api/v1/user/update",
                 "/api/v1/user/delete/{id}",

@@ -15,7 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class AdminCreateRequest {
+    @Pattern(regexp = "^$|^[a-zA-Z0-9 _-]{1,20}$", message = "Admin username contains invalid characters!")
     private String username;
+    @Pattern(regexp = "^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Enter a valid email address.")
     private String email;
     private String password;
 }

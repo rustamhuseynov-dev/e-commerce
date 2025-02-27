@@ -12,6 +12,7 @@ import com.rustam.e_commerce.dao.repository.*;
 import com.rustam.e_commerce.dto.TokenPair;
 import com.rustam.e_commerce.exception.custom.*;
 import com.rustam.e_commerce.util.jwt.JwtUtil;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -182,5 +183,10 @@ public class UtilService {
     public Admin findByAdmin(UUID id) {
         return baseUserRepository.findByAdminId(id)
                 .orElseThrow(() -> new UserNotFoundException("No such admin found."));
+    }
+
+    public User findByUserRoleIsRequestAdmin(String userId) {
+        return baseUserRepository.findUserWithRoleAndType(UUID.fromString(userId))
+                .orElseThrow(() -> new UserNotFoundException("No such user found."));
     }
 }

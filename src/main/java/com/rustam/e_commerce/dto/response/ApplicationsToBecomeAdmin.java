@@ -7,16 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ForAdminResponse {
+public class ApplicationsToBecomeAdmin {
     private String id;
     private String name;
     private String email;
-    private Set<Role> role;
-    private String text;
+    private String username;
 }

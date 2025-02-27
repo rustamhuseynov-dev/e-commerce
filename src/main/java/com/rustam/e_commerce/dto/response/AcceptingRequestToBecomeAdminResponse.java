@@ -7,16 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ForAdminResponse {
-    private String id;
-    private String name;
-    private String email;
+public class AcceptingRequestToBecomeAdminResponse {
+    private String username;
     private Set<Role> role;
     private String text;
 }
