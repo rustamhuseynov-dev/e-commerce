@@ -18,4 +18,5 @@ public class ForAdminResponse {
     private String name;
     private String email;
     private Set<Role> role;
+    private String text;
 }
