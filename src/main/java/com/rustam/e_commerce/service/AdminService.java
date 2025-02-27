@@ -3,7 +3,9 @@ package com.rustam.e_commerce.service;
 import com.rustam.e_commerce.dao.entity.user.Admin;
 import com.rustam.e_commerce.dao.entity.enums.Role;
 import com.rustam.e_commerce.dao.entity.user.BaseUser;
+import com.rustam.e_commerce.dao.entity.user.User;
 import com.rustam.e_commerce.dao.repository.BaseUserRepository;
+import com.rustam.e_commerce.dto.request.AcceptingRequestToBecomeAdminRequest;
 import com.rustam.e_commerce.dto.request.AdminCreateRequest;
 import com.rustam.e_commerce.dto.request.AdminUpdateRequest;
 import com.rustam.e_commerce.dto.request.ForAdminRequest;
@@ -33,17 +35,20 @@ public class AdminService {
     PasswordEncoder passwordEncoder;
     AdminMapper adminMapper;
     ModelMapper modelMapper;
+    EmailSendService emailSendService;
 
     public ForAdminResponse adminRequest() {
         String id = utilService.getCurrentUsername();
         BaseUser user = utilService.findById(UUID.fromString(id));
         user.setAuthorities(Collections.singleton(Role.REQUEST_ADMIN));
         baseUserRepository.save(user);
+        emailSendService.sendEmailToMessage(user.getEmail(),"We have received your application to become an admin. If you are suitable, we will give you this title.");
         return ForAdminResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getAuthorities())
+                .text("Information has been sent to your email.")
                 .build();
     }
 
@@ -114,5 +119,28 @@ public class AdminService {
         deletedResponse.setText("This user was deleted by you.");
         baseUserRepository.delete(baseUser);
         return deletedResponse;
+    }
+
+    public AcceptingRequestToBecomeAdminResponse acceptingRequestToBecomeAdmin(AcceptingRequestToBecomeAdminRequest acceptingRequestToBecomeAdminRequest) {
+        User user = utilService.findByUserRoleIsRequestAdmin(acceptingRequestToBecomeAdminRequest.getUserId());
+        switch (acceptingRequestToBecomeAdminRequest.getAcceptToEnum()) {
+            case ACCEPTED:
+                user.setAuthorities(Collections.singleton(Role.ADMIN));
+                baseUserRepository.save(user);
+                break;
+            case REJECTED:
+                return AcceptingRequestToBecomeAdminResponse.builder()
+                        .username(user.getUsername())
+                        .role(user.getAuthorities())
+                        .text("Unfortunately, you were not worthy of this role.")
+                        .build();
+            default:
+                throw new IllegalArgumentException("Unknown request type!");
+        }
+        return AcceptingRequestToBecomeAdminResponse.builder()
+                .username(user.getUsername())
+                .role(Collections.singleton(Role.ADMIN))
+                .text("Congratulations, good luck in your new position.")
+                .build();
     }
 }
