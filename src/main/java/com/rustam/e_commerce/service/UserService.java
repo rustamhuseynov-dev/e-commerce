@@ -71,10 +71,16 @@ public class UserService {
         String currentUsername = utilService.getCurrentUsername();
         User user = (User) utilService.findById(UUID.fromString(currentUsername));
         utilService.validation(currentUsername, user.getId());
-        boolean exists = utilService.findAllByUser().stream()
+        List<User> users = utilService.findAllByUser();
+        boolean exists = users.stream()
                 .map(User::getUsername)
                 .anyMatch(existingUsername -> existingUsername.equals(userUpdateRequest.getUsername()));
-        if (exists) {
+
+        boolean emailExists = users.stream()
+                .map(User::getEmail)
+                .anyMatch(existingEmail -> existingEmail.equals(userUpdateRequest.getEmail()));
+
+        if (exists || emailExists) {
             throw new ExistsException("This username is already taken.");
         }
         if (userUpdateRequest.getName() != null && !userUpdateRequest.getName().isBlank()) {
@@ -85,6 +91,9 @@ public class UserService {
         }
         if (userUpdateRequest.getUsername() != null && !userUpdateRequest.getUsername().isBlank()) {
             user.setUsername(userUpdateRequest.getUsername());
+        }
+        if (userUpdateRequest.getEmail()!= null && !userUpdateRequest.getEmail().isBlank()) {
+            user.setEmail(userUpdateRequest.getEmail());
         }
         if (userUpdateRequest.getPhone() != null && !userUpdateRequest.getPhone().isBlank()) {
             user.setPhone(userUpdateRequest.getPhone());
