@@ -130,6 +130,8 @@ public class AdminService {
                 baseUserRepository.save(user);
                 break;
             case REJECTED:
+                user.setAuthorities(Collections.singleton(Role.USER));
+                baseUserRepository.save(user);
                 return AcceptingRequestToBecomeAdminResponse.builder()
                         .username(user.getUsername())
                         .role(user.getAuthorities())
