@@ -41,11 +41,6 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userUpdateRequest),HttpStatus.OK);
     }
 
-    @PutMapping(path = "/update-email-and-password")
-    public ResponseEntity<EmailAndPasswordUpdateResponse> updateEmailAndPassword(@Valid @RequestBody EmailAndPasswordUpdateRequest emailAndPasswordUpdateRequest){
-        return new ResponseEntity<>(userService.updateEmailAndPassword(emailAndPasswordUpdateRequest),HttpStatus.OK);
-    }
-
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<UserDeletedResponse> delete(@PathVariable UUID id){
         return new ResponseEntity<>(userService.delete(id),HttpStatus.OK);
