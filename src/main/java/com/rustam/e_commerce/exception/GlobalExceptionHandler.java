@@ -2,6 +2,7 @@ package com.rustam.e_commerce.exception;
 
 import com.rustam.e_commerce.dto.response.message.ExceptionResponseMessages;
 import com.rustam.e_commerce.exception.custom.*;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -116,6 +117,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ExceptionResponseMessages> cartNotFoundException(SignatureException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.BAD_REQUEST) ,
+                HttpStatus.BAD_REQUEST
         );
     }
 
