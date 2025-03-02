@@ -21,6 +21,8 @@ public class UserUpdateRequest {
     @NotBlank(message = "The surname column cannot be empty.")
     private String surname;
     private String username;
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Enter a valid email address.")
+    private String email;
     @Pattern(regexp = "\\(\\d{3}\\)-\\d{3}-\\d{4}", message = "The phone number must be in the format (000)-000-0000.")
     private String phone;
 }
