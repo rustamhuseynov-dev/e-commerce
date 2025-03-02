@@ -21,12 +21,12 @@ public class AuthController {
 
     @PostMapping(path = "/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest){
-        return new ResponseEntity<>(authService.login(authRequest), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(authService.login(authRequest), HttpStatus.OK);
     }
 
     @PostMapping(path = "/refresh-token")
     public ResponseEntity<String> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
-        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/logout")
