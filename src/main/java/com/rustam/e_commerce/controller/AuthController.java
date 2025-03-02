@@ -24,11 +24,6 @@ public class AuthController {
         return new ResponseEntity<>(authService.login(authRequest), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/refresh-token")
-    public ResponseEntity<String> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
-        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest), HttpStatus.OK);
-    }
-
     @DeleteMapping(path = "/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
         return new ResponseEntity<>(authService.logout(refreshTokenRequest),HttpStatus.OK);
