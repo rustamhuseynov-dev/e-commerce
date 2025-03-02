@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,13 +103,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-//    @ExceptionHandler(NullPointerException.class)
-//    public ResponseEntity<ExceptionResponseMessages> nullPointerException(NullPointerException ex) {
-//        return new ResponseEntity<>(
-//                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.NOT_FOUND) ,
-//                HttpStatus.NOT_FOUND
-//        );
-//    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ExceptionResponseMessages> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.BAD_REQUEST) ,
+                HttpStatus.BAD_REQUEST
+        );
+    }
 
     @ExceptionHandler(CartNotFoundException.class)
     public ResponseEntity<ExceptionResponseMessages> cartNotFoundException(CartNotFoundException ex) {
