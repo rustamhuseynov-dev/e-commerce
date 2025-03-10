@@ -1,6 +1,7 @@
 package com.rustam.e_commerce.mapper;
 
 import com.rustam.e_commerce.dao.entity.Category;
+import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dto.response.ReadCategoryResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -18,5 +19,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface CategoryMapper {
     List<ReadCategoryResponse> toRead(List<Category> categories);
 
-    ReadCategoryResponse toDto(Category category);
+    List<ReadCategoryResponse> toDto(List<Product> byProductInCategoryId);
 }
