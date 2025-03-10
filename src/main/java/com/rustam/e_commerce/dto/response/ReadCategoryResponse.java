@@ -10,6 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReadCategoryResponse {
-    private Long categoryId;
-    private String categoryName;
+    private Long productId;
+
+    private String productName;
+
+    private String description;
+
+    private Integer quantity;
+    private double price;
+    private double discount;
+    private double specialPrice;
+    private String userId;
+    private String imageUrl;
+    private String videoUrl;
 }
