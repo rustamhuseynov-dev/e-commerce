@@ -1,6 +1,7 @@
 package com.rustam.e_commerce.service;
 
 import com.rustam.e_commerce.dao.entity.Category;
+import com.rustam.e_commerce.dao.entity.Product;
 import com.rustam.e_commerce.dao.repository.CategoryRepository;
 import com.rustam.e_commerce.dto.request.CreateCategoryRequest;
 import com.rustam.e_commerce.dto.request.DeleteCategoryRequest;
@@ -72,14 +73,15 @@ public class CategoryService {
                 .build();
     }
 
-    public ReadCategoryResponse readByName(String name) {
+    public List<ReadCategoryResponse> readByName(String name) {
         if (name.isEmpty()){
             throw new NullPointerException();
         }
         String userId = utilService.getCurrentUsername();
         Category category = categoryRepository.findByCategoryName(name)
                 .orElseThrow(() -> new CategoryNotFoundException("No such category found."));
+        List<Product> byProductInCategoryId = utilService.findByProductInCategoryId(category.getCategoryId());
         utilService.validation(userId,category.getUserId());
-        return categoryMapper.toDto(category);
+        return categoryMapper.toDto(byProductInCategoryId);
     }
 }

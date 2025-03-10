@@ -35,7 +35,7 @@ public class CategoryController {
     }
 
     @GetMapping(path = "/read-category/{name}")
-    public ResponseEntity<ReadCategoryResponse> readByName(@PathVariable String name){
+    public ResponseEntity<List<ReadCategoryResponse>> readByName(@PathVariable String name){
         return new ResponseEntity<>(categoryService.readByName(name),HttpStatus.OK);
     }
 

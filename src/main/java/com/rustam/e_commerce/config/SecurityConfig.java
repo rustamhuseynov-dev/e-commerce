@@ -53,7 +53,6 @@ public class SecurityConfig {
                 "/api/v1/cart/**",
                 "/api/v1/employee/**",
                 "/api/v1/favorite/**",
-                "/api/v1/order/**",
                 "/api/v1/shipment-tracking/**",
                 "/api/v1/user/**",
         };
@@ -69,8 +68,6 @@ public class SecurityConfig {
                 "/api/v1/user/read-by-id/{id}",
                 "/api/v1/cart/**",
                 "/api/v1/order/**",
-                "/api/v1/product/**",
-                "/api/v1/category/**",
                 "/api/v1/favorite/**"
         };
     }

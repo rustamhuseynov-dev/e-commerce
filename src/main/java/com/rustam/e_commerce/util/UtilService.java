@@ -189,4 +189,8 @@ public class UtilService {
         return baseUserRepository.findUserWithRoleAndType(UUID.fromString(userId))
                 .orElseThrow(() -> new UserNotFoundException("No such user found."));
     }
+
+    public List<Product> findByProductInCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
 }
