@@ -104,8 +104,8 @@ public class UserService {
 
     public UserDeletedResponse delete(UUID id) {
         BaseUser baseUser = utilService.findById(id);
-        String currentUsername = utilService.getCurrentUsername();
-        utilService.validation(baseUser.getId(), currentUsername);
+//        String currentUsername = utilService.getCurrentUsername();
+//        utilService.validation(baseUser.getId(), currentUsername);
         boolean tokenDeleted = utilService.deleteRefreshToken(id);
         if (!tokenDeleted){
             throw new UnauthorizedException("An error occurred while logging out.");
