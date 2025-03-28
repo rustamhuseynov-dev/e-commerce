@@ -77,11 +77,9 @@ public class CategoryService {
         if (name.isEmpty()){
             throw new NullPointerException();
         }
-        String userId = utilService.getCurrentUsername();
         Category category = categoryRepository.findByCategoryName(name)
                 .orElseThrow(() -> new CategoryNotFoundException("No such category found."));
         List<Product> byProductInCategoryId = utilService.findByProductInCategoryId(category.getCategoryId());
-        utilService.validation(userId,category.getUserId());
         return categoryMapper.toDto(byProductInCategoryId);
     }
 }
