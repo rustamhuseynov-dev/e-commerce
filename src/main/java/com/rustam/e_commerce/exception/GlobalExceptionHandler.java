@@ -152,6 +152,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponseMessages> unauthorizedException(UnauthorizedException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseMessages(ex.getClass().getName(), ex.getMessage(), HttpStatus.UNAUTHORIZED) ,
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
 
 
     // Validation exceptions
