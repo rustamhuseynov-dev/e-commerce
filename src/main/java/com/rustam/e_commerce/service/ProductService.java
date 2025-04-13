@@ -102,4 +102,8 @@ public class ProductService {
                 .text("Your product has been successfully promoted.")
                 .build();
     }
+
+    public void save(Product product) {
+        productRepository.save(product);
+    }
 }
