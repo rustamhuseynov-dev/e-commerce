@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -84,29 +85,20 @@ public class AdminService {
         return adminMapper.toDto(user);
     }
 
-    public AdminUpdateResponse update(AdminUpdateRequest adminUpdateRequest) {
-        String userId = utilService.getCurrentUsername();
-        Admin user = (Admin) utilService.findById(UUID.fromString(userId));
-        utilService.validation(userId, user.getId());
-        boolean exists = utilService.findAllByAdmin().stream()
-                .map(Admin::getUsername)
-                .anyMatch(existingUsername -> existingUsername.equals(adminUpdateRequest.getUsername()));
-        if (exists) {
+    public AdminUpdateResponse update(AdminUpdateRequest request) {
+        UUID userId = UUID.fromString(utilService.getCurrentUsername());
+        Admin user = (Admin) utilService.findById(userId);
+        utilService.validation(userId.toString(), user.getId());
+
+        if (isUsernameTaken(request.getUsername())) {
             throw new ExistsException("This username is already taken.");
         }
-        if (adminUpdateRequest.getName() != null && !adminUpdateRequest.getName().isBlank()) {
-            user.setName(adminUpdateRequest.getName());
-        }
-        if (adminUpdateRequest.getSurname() != null && !adminUpdateRequest.getSurname().isBlank()) {
-            user.setSurname(adminUpdateRequest.getSurname());
-        }
-        if (adminUpdateRequest.getUsername() != null && !adminUpdateRequest.getUsername().isBlank()) {
-            user.setUsername(adminUpdateRequest.getUsername());
-        }
-        if (adminUpdateRequest.getPhone() != null && !adminUpdateRequest.getPhone().isBlank()) {
-            user.setPhone(adminUpdateRequest.getPhone());
-        }
-        modelMapper.map(adminUpdateRequest, user);
+
+        updateFieldIfPresent(request.getName(), user::setName);
+        updateFieldIfPresent(request.getSurname(), user::setSurname);
+        updateFieldIfPresent(request.getUsername(), user::setUsername);
+        updateFieldIfPresent(request.getPhone(), user::setPhone);
+
         baseUserRepository.save(user);
         return adminMapper.toUpdated(user);
     }
@@ -150,5 +142,17 @@ public class AdminService {
     public List<ApplicationsToBecomeAdmin> applicationsToBecomeAdmin() {
         List<User> users = baseUserRepository.findAllByRoleRequestAdmin(Role.REQUEST_ADMIN);
         return adminMapper.toApplicationsToBecomeAdminResponses(users);
+    }
+
+    private boolean isUsernameTaken(String newUsername) {
+        return utilService.findAllByAdmin().stream()
+                .map(Admin::getUsername)
+                .anyMatch(newUsername::equals);
+    }
+
+    private void updateFieldIfPresent(String value, Consumer<String> setter) {
+        if (value != null && !value.isBlank()) {
+            setter.accept(value);
+        }
     }
 }
