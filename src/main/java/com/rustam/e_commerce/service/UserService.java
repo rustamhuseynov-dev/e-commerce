@@ -19,9 +19,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +40,7 @@ public class UserService {
     UserMapper userMapper;
     ModelMapper modelMapper;
     EmailSendService emailSendService;
+    Environment environment;
 
     public UserCreateResponse create(UserCreateRequest userCreateRequest) {
         boolean emailExists = utilService.findByEmailExists(userCreateRequest.getEmail());
@@ -47,6 +51,7 @@ public class UserService {
         if (emailExists){
             throw new EmailExistsException("This email already exists in the database.");
         }
+        boolean isTestProfile = Arrays.asList(environment.getActiveProfiles()).contains("test");
         User user = User.builder()
                 .name(userCreateRequest.getName())
                 .surname(userCreateRequest.getSurname())
@@ -54,11 +59,13 @@ public class UserService {
                 .email(userCreateRequest.getEmail())
                 .password(passwordEncoder.encode(userCreateRequest.getPassword()))
                 .phone(userCreateRequest.getPhone())
-                .enabled(false)
+                .enabled(isTestProfile)
                 .authorities(Collections.singleton(Role.USER))
                 .build();
         baseUserRepository.save(user);
-        emailSendService.sendVerificationCode(userCreateRequest.getEmail());
+        if (!isTestProfile) {
+            emailSendService.sendVerificationCode(userCreateRequest.getEmail());
+        }
         return userMapper.toResponse(user);
     }
 
