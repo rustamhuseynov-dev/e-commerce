@@ -74,37 +74,16 @@ public class UserService {
         return userMapper.toResponses(users);
     }
 
-    public UserUpdateResponse update(UserUpdateRequest userUpdateRequest) {
+    public UserUpdateResponse update(UserUpdateRequest request) {
         String currentUsername = utilService.getCurrentUsername();
-        User user = (User) utilService.findById(UUID.fromString(currentUsername));
+        UUID currentUserId = UUID.fromString(currentUsername);
+        User user = (User) utilService.findById(currentUserId);
+
         utilService.validation(currentUsername, user.getId());
-        List<User> users = utilService.findAllByUser();
-        boolean exists = users.stream()
-                .map(User::getUsername)
-                .anyMatch(existingUsername -> existingUsername.equals(userUpdateRequest.getUsername()));
 
-        boolean emailExists = users.stream()
-                .map(User::getEmail)
-                .anyMatch(existingEmail -> existingEmail.equals(userUpdateRequest.getEmail()));
+        checkUsernameOrEmailExists(request, UUID.fromString(user.getId()));
 
-        if (exists || emailExists) {
-            throw new ExistsException("This username is already taken.");
-        }
-        if (userUpdateRequest.getName() != null && !userUpdateRequest.getName().isBlank()) {
-            user.setName(userUpdateRequest.getName());
-        }
-        if (userUpdateRequest.getSurname() != null && !userUpdateRequest.getSurname().isBlank()) {
-            user.setSurname(userUpdateRequest.getSurname());
-        }
-        if (userUpdateRequest.getUsername() != null && !userUpdateRequest.getUsername().isBlank()) {
-            user.setUsername(userUpdateRequest.getUsername());
-        }
-        if (userUpdateRequest.getEmail()!= null && !userUpdateRequest.getEmail().isBlank()) {
-            user.setEmail(userUpdateRequest.getEmail());
-        }
-        if (userUpdateRequest.getPhone() != null && !userUpdateRequest.getPhone().isBlank()) {
-            user.setPhone(userUpdateRequest.getPhone());
-        }
+        updateUserFields(user, request);
         baseUserRepository.save(user);
         return userMapper.toUpdatedResponse(user);
     }
@@ -150,5 +129,31 @@ public class UserService {
         User user = (User) utilService.findById(userId);
         utilService.validation(currentUsername,user.getId());
         return userMapper.toDto(user);
+    }
+
+    private void checkUsernameOrEmailExists(UserUpdateRequest request, UUID userId) {
+        List<User> users = utilService.findAllByUser();
+
+        boolean usernameExists = users.stream()
+                .anyMatch(u -> !u.getId().equals(userId) && u.getUsername().equals(request.getUsername()));
+
+        boolean emailExists = users.stream()
+                .anyMatch(u -> !u.getId().equals(userId) && u.getEmail().equals(request.getEmail()));
+
+        if (usernameExists || emailExists) {
+            throw new ExistsException("This username or email is already taken.");
+        }
+    }
+
+    private void updateUserFields(User user, UserUpdateRequest request) {
+        if (isNotBlank(request.getName())) user.setName(request.getName());
+        if (isNotBlank(request.getSurname())) user.setSurname(request.getSurname());
+        if (isNotBlank(request.getUsername())) user.setUsername(request.getUsername());
+        if (isNotBlank(request.getEmail())) user.setEmail(request.getEmail());
+        if (isNotBlank(request.getPhone())) user.setPhone(request.getPhone());
+    }
+
+    private boolean isNotBlank(String value) {
+        return value != null && !value.isBlank();
     }
 }
