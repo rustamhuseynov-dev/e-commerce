@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres-ecommerce-db
+    environment:
+      POSTGRES_DB: ecommerce_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "012345"
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce-net
+
+  redis-server:
+    image: redis:latest
+    container_name: redis-ecommerce-server
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce-net
+
+  e-commerce:
+    image: rustemh/e-commerce:latest
+    container_name: e-commerce
+    depends_on:
+      - postgres-db
+      - redis-server
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    ports:
+      - "5555:5555"
+    networks:
+      - ecommerce-net
+
+networks:
+  ecommerce-net:
+    driver: bridge
