@@ -1,6 +1,6 @@
 spring:
-#  profiles:
-#    active: test
+  profiles:
+    active: default
   application:
     name: e-commerce
     jwt:
