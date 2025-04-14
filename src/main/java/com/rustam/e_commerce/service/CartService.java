@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,47 +38,20 @@ public class CartService {
     @Transactional
     public CartResponse addToCart(CartRequest cartRequest) {
         BaseUser user = utilService.findById(cartRequest.getUserId());
-        Cart cart = cartRepository.findByUser(user.getId())
-                .orElseGet(() -> Cart.builder()
-                        .user(user.getId())
-                        .cartItems(new ArrayList<>())
-                        .totalPrice(0)
-                        .build());
+        Cart cart = getOrCreateCart(user);
 
         Product product = utilService.findByProductId(cartRequest.getProductId());
+        validateProductStock(product, cartRequest.getQuantity());
 
-        if (product.getQuantity() < cartRequest.getQuantity()) {
-            throw new NotManyProductsException("Not many products");
-        }
-
-        CartItem cartItem = cart.getCartItems().stream()
-                .filter(item -> item.getProduct().getProductId().equals(cartRequest.getProductId()))
-                .findFirst()
-                .orElseGet(() -> {
-                    CartItem newItem = CartItem.builder()
-                            .product(product)
-                            .quantity(0)
-                            .cart(cart)
-                            .price(product.getPrice())
-                            .productName(product.getProductName())
-                            .build();
-                    cart.getCartItems().add(newItem);
-                    return newItem;
-                });
-
-        cartItem.setQuantity(cartItem.getQuantity() + cartRequest.getQuantity());
-        cartItem.calculateTotalPrice();
+        CartItem cartItem = getOrCreateCartItem(cart, product);
+        updateCartItemQuantity(cartItem, cartRequest.getQuantity());
 
         updateCartTotalPrice(cart);
         cartRepository.save(cart);
 
-        return CartResponse.builder()
-                .items(cart.getCartItems())
-                .userId(cartRequest.getUserId())
-                .totalPrice(cart.getTotalPrice())
-                .message("Product added successfully!")
-                .build();
+        return buildCartResponse(cart, cartRequest.getUserId());
     }
+
 
     private void updateCartTotalPrice(Cart cart) {
         cart.setTotalPrice(cart.getCartItems().stream()
@@ -119,4 +93,51 @@ public class CartService {
         cartRepository.delete(cart);
         return cartDeleteResponse;
     }
+
+    private Cart getOrCreateCart(BaseUser user) {
+        return cartRepository.findByUser(user.getId())
+                .orElseGet(() -> Cart.builder()
+                        .user(user.getId())
+                        .cartItems(new ArrayList<>())
+                        .totalPrice(0)
+                        .build());
+    }
+
+    private void validateProductStock(Product product, int requestedQuantity) {
+        if (product.getQuantity() < requestedQuantity) {
+            throw new NotManyProductsException("Not many products");
+        }
+    }
+
+    private CartItem getOrCreateCartItem(Cart cart, Product product) {
+        return cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getProductId().equals(product.getProductId()))
+                .findFirst()
+                .orElseGet(() -> {
+                    CartItem newItem = CartItem.builder()
+                            .product(product)
+                            .quantity(0)
+                            .cart(cart)
+                            .price(product.getPrice())
+                            .productName(product.getProductName())
+                            .build();
+                    cart.getCartItems().add(newItem);
+                    return newItem;
+                });
+    }
+
+    private void updateCartItemQuantity(CartItem item, int quantityToAdd) {
+        item.setQuantity(item.getQuantity() + quantityToAdd);
+        item.calculateTotalPrice();
+    }
+
+    private CartResponse buildCartResponse(Cart cart, UUID userId) {
+        return CartResponse.builder()
+                .items(cart.getCartItems())
+                .userId(userId)
+                .totalPrice(cart.getTotalPrice())
+                .message("Product added successfully!")
+                .build();
+    }
+
 }
