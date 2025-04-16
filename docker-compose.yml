@@ -24,8 +24,8 @@ services:
     image: rustemh/e-commerce:latest
     container_name: e-commerce
     depends_on:
-      - postgres-db
-      - redis-server
+      - postgres-ecommerce-db
+      - redis-ecommerce-server
     environment:
       SPRING_PROFILES_ACTIVE: test
     ports:
