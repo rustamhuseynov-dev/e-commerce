@@ -1,7 +1,7 @@
 spring:
   # Database
   datasource:
-    url: jdbc:postgresql://postgres-db:5433/ecommerce_db
+    url: jdbc:postgresql://postgres-ecommerce-db:5433/ecommerce_db
     username: postgres
     password: "012345"
     driver-class-name: org.postgresql.Driver
@@ -15,5 +15,5 @@ spring:
     open-in-view: false
   data:
     redis:
-      host: redis-server
+      host: redis-ecommerce-server
       port: 6380
