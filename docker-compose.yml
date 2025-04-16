@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  postgres-db:
+  postgres-ecommerce-db:
     image: postgres:latest
     container_name: postgres-ecommerce-db
     environment:
@@ -12,7 +12,7 @@ services:
     networks:
       - ecommerce-net
 
-  redis-server:
+  redis-ecommerce-server:
     image: redis:latest
     container_name: redis-ecommerce-server
     ports:
