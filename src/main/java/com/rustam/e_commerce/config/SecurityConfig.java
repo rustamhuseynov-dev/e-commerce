@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -41,11 +42,13 @@ public class SecurityConfig {
                 .logout(LogoutConfigurer::permitAll)
                 .httpBasic(withDefaults())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .cors(cors -> cors.configurationSource(request -> getCorsConfiguration()))
                 .build();
     }
 
     private String[] getPublicEndpoints() {
         return new String[]{
+                "/api/v1/auth/login",
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
                 "/swagger-ui.html/**",
@@ -83,6 +86,14 @@ public class SecurityConfig {
                 "/api/v1/product/**",
                 "/api/v1/user/**",
         };
+    }
+
+    private CorsConfiguration getCorsConfiguration() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+        return corsConfiguration;
     }
 
 }
