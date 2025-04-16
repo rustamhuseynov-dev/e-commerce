@@ -48,16 +48,11 @@ public class SecurityConfig {
 
     private String[] getPublicEndpoints() {
         return new String[]{
+                "/**",
                 "/api/v1/auth/login",
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
                 "/swagger-ui.html/**",
-                "/api/v1/auth/**",
-                "/api/v1/cart/**",
-                "/api/v1/employee/**",
-                "/api/v1/favorite/**",
-                "/api/v1/shipment-tracking/**",
-                "/api/v1/user/**",
         };
     }
 
